@@ -8,12 +8,21 @@ import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./routes/private";
 import CallForm from "./pages/CallForm";
 import AddPrompt from "./pages/AddPrompt";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   return (
     <>
       <Router>
         <Routes>
+          <Route
+            path="/landing-page"
+            element={
+              <PublicRoute>
+                <LandingPage />
+              </PublicRoute>
+            }
+          />
           <Route
             path="/"
             element={
@@ -25,9 +34,9 @@ function App() {
           <Route
             path="/signup"
             element={
-              <PublicRoute>
-                <SignUp />
-              </PublicRoute>
+              // <PublicRoute>
+              <SignUp />
+              // </PublicRoute>
             }
           />
           <Route

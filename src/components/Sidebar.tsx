@@ -127,9 +127,8 @@ const Sidebar = () => {
         <BiMenu size={24} />
       </button>
       <div
-        className={`${
-          open ? "translate-x-0" : "-translate-x-full"
-        } fixed lg:static top-0 left-0 min-h-[100vh] w-64 bg-white text-black transform lg:translate-x-0 transition-transform duration-300 z-50`}
+        className={`${open ? "translate-x-0" : "-translate-x-full"
+          } fixed lg:static top-0 left-0 min-h-[100vh] w-64 bg-white text-black transform lg:translate-x-0 transition-transform duration-300 z-50`}
       >
         <div className="flex items-center justify-between p-4 border-b border-black">
           <img src={Logo} width={150} />
@@ -148,11 +147,10 @@ const Sidebar = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-3 py-2 rounded relative transition-colors duration-200 pl-5 ${
-                  isActive
+                className={`px-3 py-2 rounded relative transition-colors duration-200 pl-5 ${isActive
                     ? "bg-blue-100 text-[#3F3EED] font-semibold"
                     : "text-black hover:bg-blue-100"
-                }`}
+                  }`}
                 onClick={() => setOpen(false)}
               >
                 {isActive && (

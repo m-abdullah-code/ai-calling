@@ -40,3 +40,15 @@
 .read-the-docs {
   color: #888;
 } */
+
+
+@layer utilities {
+  .animate-gradient-move {
+    background-size: 200% auto;
+    transition: background-position 1.2s ease-in-out, transform 0.7s ease-in-out;
+  }
+
+  .animate-gradient-move:hover {
+    background-position: right center;
+  }
+}

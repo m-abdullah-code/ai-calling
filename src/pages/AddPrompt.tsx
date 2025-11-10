@@ -209,7 +209,7 @@ const AddPrompt = () => {
           onChange={(e) => setPrompt(e.target.value)}
           rows={3}
           placeholder="Type your prompt here..."
-          className="w-full border border-blue-500 rounded-sm px-4 py-3 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-900 mb-4 resize-none"
+          className="w-full border border-blue-900 rounded-sm px-4 py-3 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-900 mb-4 resize-none"
         />
 
         {/* ✅ Loader-enabled Button */}

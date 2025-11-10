@@ -65,7 +65,7 @@ const SignUp: React.FC = () => {
   // const passwordValue = watch("password");
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center gradient-rotate">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white shadow-lg rounded-xl p-5 md:p-8 w-full max-w-md text-center m-5 md:p-0"
@@ -76,7 +76,7 @@ const SignUp: React.FC = () => {
           {/* <div className="bg-gradient-to-r from-[#6d0f78] to-[#0a0f2d] p-2 rounded-lg shadow-lg">
             <FiDownload className="text-white text-4xl rotate-270" />
           </div> */}
-          <div className="text-[#3F3EED] font-bold">Start your Journey</div>
+          <div className="text-blue-900 font-base font-bold">Start your Journey</div>
         </div>
 
         {/* Title */}
@@ -95,7 +95,7 @@ const SignUp: React.FC = () => {
             type="text"
             placeholder="Username"
             {...register("username", { required: "Email is required" })}
-            className="w-full px-4 py-2 mb-1 border border-gray-300 mt-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#3F3EED] placeholder-gray-300"
+            className="w-full px-4 py-2 mb-1 border border-gray-300 mt-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-900 placeholder-gray-300"
           />
           {errors.email && (
             <p className="text-red-500 text-sm mb-3">{errors.email.message}</p>
@@ -110,7 +110,7 @@ const SignUp: React.FC = () => {
             type="email"
             placeholder="You@example.com"
             {...register("email", { required: "Email is required" })}
-            className="w-full px-4 py-2 mb-1 border border-gray-300 mt-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#3F3EED] placeholder-gray-300"
+            className="w-full px-4 py-2 mb-1 border border-gray-300 mt-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-900 placeholder-gray-300"
           />
           {errors.email && (
             <p className="text-red-500 text-sm mb-3">{errors.email.message}</p>
@@ -125,7 +125,7 @@ const SignUp: React.FC = () => {
             type="password"
             placeholder="Password"
             {...register("password", { required: "Password is required" })}
-            className="w-full px-4 py-2 mb-1 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-1 focus:ring-[#3F3EED] placeholder-gray-300"
+            className="w-full px-4 py-2 mb-1 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-1 focus:ring-blue-900 placeholder-gray-300"
           />
           {errors.password && (
             <p className="text-red-500 text-sm mb-5">
@@ -167,11 +167,10 @@ const SignUp: React.FC = () => {
         <button
           type="submit"
           disabled={signupLoading}
-          className={`w-full cursor-pointer flex items-center justify-center gap-2 text-white py-2 rounded-lg transition-all ${
-            signupLoading
-              ? "bg-[#3F3EED] opacity-70 cursor-not-allowed"
-              : "bg-[#3F3EED]"
-          }`}
+          className={`w-full cursor-pointer flex items-center justify-center gap-2 text-white py-2 rounded-lg transition-all ${signupLoading
+            ? "bg-blue-900 opacity-70 cursor-not-allowed"
+            : "bg-blue-900 hover:opacity-90"
+            }`}
         >
           {signupLoading ? (
             <span className="flex items-center gap-2">

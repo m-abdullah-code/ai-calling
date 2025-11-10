@@ -35,7 +35,7 @@ function ThreeSteps() {
                         key={index}
                         className="
         relative rounded-xl overflow-hidden shadow-md hover:shadow-2xl
-        bg-gradient-to-r from-blue-900 to-blue-500 text-white
+        bg-gradient-to-r from-[#382b86] to-[#00021D] text-white
         flex flex-col justify-center items-center text-center
         w-[260px] h-[260px] sm:w-[240px] sm:h-[240px] md:w-[250px] md:h-[250px]
         max-[400px]:w-[220px] max-[400px]:h-[220px] max-[350px]:w-[200px] max-[350px]:h-[200px]

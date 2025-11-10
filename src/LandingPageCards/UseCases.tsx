@@ -1,36 +1,42 @@
 import LandCard from "../components/LandCard";
 
+import support from "../assets/Icons/support.webp"
+import collection from "../assets/Icons/collection.webp"
+import calender from "../assets/Icons/calender.webp"
+import fifth from "../assets/Icons/fifth.webp"
+import list from "../assets/Icons/list.webp"
+
 function UseCases() {
     const useCases = [
         {
             title: "Customer Support",
             desc: "Deliver 24/7 AI-powered assistance with Paul.ai, without increasing staff costs.",
-            img: "/assets/support.png",
+            img: support,
         },
         {
             title: "Appointment Scheduling",
             desc: "Paul.ai manages bookings, reschedules, and confirmations seamlessly.",
-            img: "/assets/calender.png",
+            img: calender,
         },
         {
             title: "Survey & Feedback Calls",
             desc: "Gather valuable customer insights automatically, without human intervention.",
-            img: "/assets/list.png",
+            img: list,
         },
         {
             title: "Collections & Reminders",
             desc: "Automate payment reminders and reduce overdue payments effortlessly with Paul.ai.",
-            img: "/assets/collection.png",
+            img: collection,
         },
         {
             title: "HR & Recruitment",
             desc: "Paul.ai pre-screens candidates, schedules interviews, and follows up automatically.",
-            img: "/assets/fifth.png",
+            img: fifth,
         },
         {
             title: "Custom Development",
             desc: "Tailored AI solutions from Paul.ai, designed to meet your unique business needs.",
-            img: "/assets/calender.png",
+            img: calender,
         },
 
     ];

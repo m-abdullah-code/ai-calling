@@ -986,7 +986,7 @@ const Dashboard = () => {
       <div className=" py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-blue-500 mb-2"> {/*text-[#3F3EED]*/}
+          <h1 className="text-4xl font-bold text-blue-900 mb-2"> {/*text-[#3F3EED]*/}
             Analytics Dashboard
           </h1>
           <p className="text-black">Monitor and analyze agent interactions</p>
@@ -1000,7 +1000,7 @@ const Dashboard = () => {
                   transform transition-all duration-500 hover:scale-105 hover:shadow-2xl animate-fadeInUp"
           >
             <div>
-              <h3 className="text-lg text-blue-500 font-semibold "> {/*text-[#391f52]*/}
+              <h3 className="text-lg text-blue-900 font-semibold "> {/*text-[#391f52]*/}
                 Total Calls
               </h3>
               <p className="text-3xl font-bold text-gray-800 mt-1">
@@ -1058,7 +1058,7 @@ const Dashboard = () => {
 
         {/* Graph Section */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 my-5">
-          <h3 className="text-2xl font-bold text-blue-500 mb-4"> {/*text-[#3F3EED]*/}
+          <h3 className="text-2xl font-bold text-blue-900 mb-4"> {/*text-[#3F3EED]*/}
             Call Status Distribution
           </h3>
 

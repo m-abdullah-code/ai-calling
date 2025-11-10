@@ -46,12 +46,12 @@ function FooterLanding() {
 
     return (
         <>
-            <footer className="bg-white text-gray-700 py-10 mt-10 w-full">
+            <footer className="text-gray-700 py-10 mt-10 w-full bg-gradient-to-b from-[#382b86] to-[#00021D]">
                 <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Logo */}
                     <div className="flex justify-center md:justify-start mb-8">
-                        <a href="/" className="text-xl text-blue-900 font-bold">
-                            Paul.<span className="font-semibold text-blue-500">Calling</span>
+                        <a href="/" className="text-2xl text-white font-bold">
+                            Paul.<span className="font-semibold text-white">Calling</span>
                         </a>
                     </div>
 
@@ -59,7 +59,7 @@ function FooterLanding() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 text-center md:text-left">
                         {Object.entries(footerLinks).map(([section, links]) => (
                             <div key={section}>
-                                <h3 className="font-semibold mb-4 text-gray-900">{section}</h3>
+                                <h3 className="font-semibold mb-4 text-white">{section}</h3>
 
                                 {section !== "Contact Us" ? (
                                     <ul className="space-y-2">
@@ -67,7 +67,7 @@ function FooterLanding() {
                                             <li key={label}>
                                                 <a
                                                     href={href}
-                                                    className="text-xs text-gray-800 hover:text-blue-500 transition-colors"
+                                                    className="text-xs text-white hover:text-blue-500 transition-colors"
                                                 >
                                                     {label}
                                                 </a>
@@ -78,7 +78,7 @@ function FooterLanding() {
                                     <div className="flex flex-col items-center md:items-start space-y-3">
                                         <a
                                             href={links[0].href}
-                                            className="text-sm text-gray-800 hover:text-blue-500 transition-colors"
+                                            className="text-sm text-white hover:text-blue-500 transition-colors"
                                         >
                                             {links[0].label}
                                         </a>
@@ -90,7 +90,7 @@ function FooterLanding() {
                                                     href={href}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="text-gray-600 transition-colors"
+                                                    className="text-white transition-colors"
                                                 >
                                                     <i className={`lucide ${icon}`} />
                                                 </a>
@@ -104,7 +104,7 @@ function FooterLanding() {
 
                     {/* Bottom */}
                     <div className="border-t border-gray-200 mt-10 pt-6">
-                        <p className="text-center text-sm text-gray-500">
+                        <p className="text-center text-sm text-white">
                             ©2025 | All rights reserved by Paul.ai AI
                         </p>
                     </div>

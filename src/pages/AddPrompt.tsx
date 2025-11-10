@@ -196,7 +196,7 @@ const AddPrompt = () => {
   return (
     <div className="flex flex-col items-center justify-center px-4 py-10">
       <div className="w-full max-w-2xl p-7">
-        <h1 className="text-2xl sm:text-4xl font-bold text-center mb-10 text-blue-500">
+        <h1 className="text-2xl sm:text-4xl font-bold text-center mb-10 text-blue-900">
           Prompt Manager
         </h1>
         <p className="text-gray-600 text-center mb-8">
@@ -209,7 +209,7 @@ const AddPrompt = () => {
           onChange={(e) => setPrompt(e.target.value)}
           rows={3}
           placeholder="Type your prompt here..."
-          className="w-full border border-blue-500 rounded-sm px-4 py-3 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 mb-4 resize-none"
+          className="w-full border border-blue-500 rounded-sm px-4 py-3 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-900 mb-4 resize-none"
         />
 
         {/* ✅ Loader-enabled Button */}
@@ -217,8 +217,8 @@ const AddPrompt = () => {
           onClick={handleAddOrUpdate}
           disabled={!prompt.trim() || isSubmitting}
           className={`w-full flex items-center justify-center gap-2 rounded-xl py-3 text-white font-medium transition-all ${!prompt.trim() || isSubmitting
-            ? "bg-blue-500/50 cursor-not-allowed"
-            : "bg-blue-500 hover:bg-blue-900 cursor-pointer"
+            ? "bg-blue-900/50 cursor-not-allowed"
+            : "bg-blue-900 hover:opacity-90 cursor-pointer"
             }`}
         >
           {isSubmitting ? (
@@ -237,7 +237,7 @@ const AddPrompt = () => {
 
         {/* ✅ Table Section */}
         <div className="mt-8">
-          <h2 className="text-xl font-bold text-blue-500 mb-3">
+          <h2 className="text-xl font-bold text-blue-900 mb-3">
             Saved Prompt
           </h2>
           <table className="w-full border border-blue-500 rounded-xl overflow-hidden">

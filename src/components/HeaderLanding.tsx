@@ -75,7 +75,7 @@ function HeaderLanding() {
                     {/* Mobile Hamburger */}
                     <button
                         onClick={() => setMenuOpen(true)}
-                        className={`md:hidden text-3xl focus:outline-none transition-colors duration-300 ${isScrolled ? "text-blue-900" : "text-white"
+                        className={`md:hidden text-3xl focus:outline-none transition-colors duration-300 cursor-pointer ${isScrolled ? "text-blue-900" : "text-white"
                             }`}
                     >
                         <Menu />
@@ -89,7 +89,7 @@ function HeaderLanding() {
                 >
                     <button
                         onClick={() => setMenuOpen(false)}
-                        className="absolute top-5 right-5 text-3xl text-blue-900 hover:text-blue-700 transition-all"
+                        className="absolute top-5 left-5 text-3xl text-blue-900 hover:text-blue-700 transition-all cursor-pointer"
                     >
                         <X />
                     </button>

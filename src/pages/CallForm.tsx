@@ -588,7 +588,7 @@ function CallForm() {
       outbound_number: "",
       objective: "",
       context: "",
-      language: "english",
+      language: user?.language || "en",
       voice: "",
     },
   });
@@ -750,7 +750,7 @@ function CallForm() {
     <>
       {/* <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8"> */}
       <div className="max-w-3xl mx-auto p-8 mt-8">
-        <h1 className="text-2xl sm:text-4xl font-bold text-center mb-10 text-blue-500">
+        <h1 className="text-2xl sm:text-4xl font-bold text-center mb-10 text-blue-900">
           Let AI Handle Your Next Call
         </h1>
 
@@ -758,13 +758,13 @@ function CallForm() {
           {/* Name + Email */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
+              <label className="block text-sm font-semibold text-black mb-1">
                 Your Name
               </label>
               <input
                 type="text"
                 {...register("caller_name", { required: "Name is required" })}
-                className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#3F3EED] hover:border-blue-400
+                className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 hover:border-blue-900
  ${errors.caller_name ? "border-red-500" : "border-gray-300"}`}
                 placeholder="Your Name"
               />
@@ -776,7 +776,7 @@ function CallForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
+              <label className="block text-sm font-semibold text-black mb-1">
                 Your Email
               </label>
               <input
@@ -788,8 +788,8 @@ function CallForm() {
                     message: "Email is invalid",
                   },
                 })}
-                className={`w-full px-4 hover:border-blue-400
- py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#3F3EED]  ${errors.caller_email ? "border-red-500" : "border-gray-300"
+                className={`w-full px-4 hover:border-blue-900
+ py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900  ${errors.caller_email ? "border-red-500" : "border-gray-300"
                   }`}
                 placeholder="name@example.com"
               />
@@ -829,7 +829,7 @@ function CallForm() {
             </div> */}
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
+              <label className="block text-sm font-semibold text-black mb-1">
                 Number to Call
               </label>
               <input
@@ -841,7 +841,7 @@ function CallForm() {
                     message: "Enter a valid phone number",
                   },
                 })}
-                className={`w-full px-4 py-2 border rounded-md hover:border-blue-400 focus:outline-none focus:ring-1 focus:ring-[#3F3EED]  ${errors.outbound_number ? "border-red-500" : "border-gray-300"
+                className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900  ${errors.outbound_number ? "border-red-500" : "border-gray-300"
                   }`}
                 placeholder="+1234567890"
               />
@@ -855,12 +855,12 @@ function CallForm() {
 
           {/* Agent Name (New Field) */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-black mb-1">
               Agent Name
             </label>
             <select
               {...register("voice", { required: "Agent name is required" })}
-              className={`w-full px-4 py-2 border rounded-md hover:border-blue-400 focus:outline-none focus:ring-1 focus:ring-[#3F3EED] ${errors.voice ? "border-red-500" : "border-gray-300"
+              className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900 ${errors.voice ? "border-red-500" : "border-gray-300"
                 }`}
             >
               <option value="">Select Agent</option>
@@ -904,7 +904,7 @@ function CallForm() {
 
           {/* Context */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-black mb-1">
               Call Context
             </label>
             {/* <textarea
@@ -922,7 +922,7 @@ function CallForm() {
                   ? "Loading system prompt..."
                   : "Provide any additional context for the call..."
               }
-              className={`w-full px-4 py-2 border rounded-md hover:border-blue-400 focus:outline-none focus:ring-1 focus:ring-[#3F3EED] ${errors.context ? "border-red-500" : "border-gray-300"
+              className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900 ${errors.context ? "border-red-500" : "border-gray-300"
                 }`}
             />
 
@@ -935,12 +935,12 @@ function CallForm() {
 
           {/* Language */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-black mb-1">
               Language
             </label>
             <select
               {...register("language")}
-              className="w-full px-4 py-2 border border-gray-300 hover:border-blue-400 rounded-md focus:outline-none focus:ring-1 focus:ring-[#3F3EED] "
+              className="w-full px-4 py-2 border border-gray-300 hover:border-blue-900 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900"
             >
               <option value="en">English</option>
               <option value="es">Spanish</option>
@@ -952,7 +952,7 @@ function CallForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2 bg-blue-500 text-lg hover:bg-blue-900 font-semibold w-full cursor-pointer text-white rounded-md focus:outline-none focus:ring-1 focus:ring-blue-blue-900 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 bg-blue-900 text-lg hover:opacity-90 font-semibold w-full cursor-pointer text-white rounded-md focus:outline-none focus:ring-1 focus:ring-blue-blue-900 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed in_hover"
             >
               {isSubmitting ? "Initiating Call..." : "Initiate Call"}
             </button>
@@ -969,10 +969,10 @@ function CallForm() {
             className="bg-white rounded-lg shadow-lg w-[95%] sm:w-[75%] md:w-[50%] text-center"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="text-3xl text-blue-500 text-center font-bold mb-4 p-5">Call Initiated</h2>
+            <h2 className="text-3xl text-blue-900 text-center font-bold mb-4 p-5">Call Initiated</h2>
             <div className="flex flex-wrap items-center mb-4 px-6">
               <span className="font-medium">Call ID:</span>
-              <span className="md:px-3 md:mx-5 py-1 bg-gray-500 text-white rounded-lg">
+              <span className="md:px-3 md:mx-5 py-1 text-gray-700 rounded-lg">
                 {callId}
               </span>
             </div>
@@ -992,10 +992,10 @@ function CallForm() {
                 {/* Animated Circle */}
                 <div className="relative">
                   {/* Outer Animated Pulse */}
-                  <span className="absolute inset-0 rounded-full bg-blue-500 opacity-60 animate-ping"></span>
+                  <span className="absolute inset-0 rounded-full bg-blue-900 opacity-60 animate-ping"></span>
 
                   {/* Inner Static Circle */}
-                  <div className="w-20 h-20 rounded-full bg-blue-500 flex items-center justify-center shadow-md relative overflow-hidden">
+                  <div className="w-20 h-20 rounded-full bg-blue-900 flex items-center justify-center shadow-md relative overflow-hidden">
                     <IoCall color="white" size={30} />
                   </div>
                 </div>
@@ -1062,13 +1062,13 @@ function CallForm() {
             <div className="p-6 border-t border-[#d1d5dc] flex justify-center">
               <button
                 onClick={() => callId && handlePoll(callId)}
-                className="w-full cursor-pointer sm:w-auto px-2 sm:px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-900 transform transition-all duration-200 font-medium text-base font-semibold shadow-lg"
+                className="w-full cursor-pointer sm:w-auto px-2 sm:px-6 py-2 bg-blue-900 text-white rounded-lg hover:opacity-90 transform transition-all duration-200 font-medium text-base font-semibold shadow-lg"
               >
                 Check Status Now
               </button>
               <button
                 onClick={() => dispatch(togglePopup(false))}
-                className="ml-4 px-6 py-2 bg-gray-400 text-white text-base font-semibold hover:bg-gray-500 rounded-lg cursor-pointer"
+                className="ml-4 px-6 py-2 bg-white border border-blue-900 text-blue-900 text-base font-semibold rounded-lg cursor-pointer"
               >
                 Close
               </button>

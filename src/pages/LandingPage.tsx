@@ -1,7 +1,7 @@
 import { lazy } from "react"
 import HeroSection from "../components/LandHeroSection"
 
-const BannerLand = lazy(() => import("../LandingPageCards/BannerLand"))
+const BannerLand = lazy(() => import("../components/BannerLand"))
 const CallAction = lazy(() => import("../LandingPageCards/CallAction"))
 const UseCases = lazy(() => import("../LandingPageCards/UseCases"))
 const KeyBenefit = lazy(() => import("../LandingPageCards/KeyBenefits"))

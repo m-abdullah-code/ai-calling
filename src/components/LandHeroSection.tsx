@@ -3,7 +3,7 @@ import heroVideo from "../assets/Videos/herobg.mp4";
 
 function LandHeroSection() {
     return (
-        <section className="relative w-full min-h-[40rem] overflow-hidden bg-gradient-to-r from-blue-900 to-blue-500" >
+        <section className="relative w-full min-h-[40rem] md:h-[100vh] overflow-hidden bg-gradient-to-r from-blue-900 to-blue-500" >
             {/* Background Video */}
             < video
                 className="absolute top-0 left-0 w-full h-full object-cover"
@@ -19,7 +19,7 @@ function LandHeroSection() {
             <Header />
 
             {/* HERO CONTENT */}
-            < div className="relative container mx-auto min-h-[40rem] px-3 sm:px-4 flex flex-col justify-center items-center text-center text-white tracking-[1px]" >
+            < div className="relative container mx-auto h-full px-3 sm:px-4 flex flex-col justify-center items-center text-center text-white tracking-[1px]" >
                 <p className="px-3 sm:px-4 py-2 mb-4 text-[10px] sm:text-xs border border-white rounded-full inline-block">
                     Paul.ai - The AI Agent That Transforms Your Calling Experience
                 </p>

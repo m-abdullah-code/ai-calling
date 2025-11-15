@@ -205,13 +205,14 @@ const Sidebar = () => {
   const menuItems = [
     { label: "Dashboard", path: "/dashboard" },
     { label: "Initiate Call", path: "/call" },
+    { label: "Upload Csv", path: "/upload-csv" },
     { label: "Add Prompt", path: "/add-prompt" },
   ];
 
   const handleLogout = () => {
     dispatch(logout());
     localStorage.removeItem("user");
-    navigate("/login");
+    navigate("/landing-page");
   };
 
   return (
@@ -246,7 +247,7 @@ const Sidebar = () => {
                 key={item.path}
                 to={item.path}
                 className={`px-3 py-2 rounded relative transition-all text-white hover:text-black duration-200 pl-5 ${isActive
-                  ? "bg-blue-700 text-[#fff] font-semibold hover:text-white"
+                  ? "bg-blue-500 text-[#fff] font-semibold hover:text-white"
                   : "text-black hover:bg-white"
                   }`}
                 onClick={() => setOpen(false)}

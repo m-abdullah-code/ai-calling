@@ -1,4 +1,4 @@
-
+import { Link } from "react-router-dom";
 
 function FooterLanding() {
 
@@ -32,7 +32,7 @@ function FooterLanding() {
             { label: "Enterprise Solution", href: "#" },
         ],
         "Contact Us": [
-            { label: "support@qcall.ai", href: "#" },
+            { label: "support@paulcall.ai", href: "#" },
         ],
     };
 
@@ -50,9 +50,9 @@ function FooterLanding() {
                 <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Logo */}
                     <div className="flex justify-center md:justify-start mb-8">
-                        <a href="/" className="text-2xl text-white font-bold">
+                        <Link to="/" className="text-2xl text-white font-bold">
                             Paul.<span className="font-semibold text-white">Calling</span>
-                        </a>
+                        </Link>
                     </div>
 
                     {/* Footer Grid */}

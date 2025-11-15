@@ -558,10 +558,10 @@ import {
   //   togglePopup,
 } from "../store/slices/callForm";
 import { useDispatch, useSelector } from "react-redux";
-import { checkCallStatus, getSystemPrompt, initiateCall } from "../api/Call";
+import { checkCallStatus, initiateCall, getContacts } from "../api/Call";
 // import { useNavigate } from "react-router-dom";
 import type { RootState } from "../store/store";
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoCall } from "react-icons/io5";
 import type { AxiosError } from "axios";
@@ -670,33 +670,85 @@ function CallForm() {
     };
   }, [openPopup, callId, token]);
 
-  const [loadingPrompt, setLoadingPrompt] = useState<boolean>(false);
+  // const [loadingPrompt, setLoadingPrompt] = useState<boolean>(false);
 
-  // const token = useSelector((state: RootState) => state.auth.user?.access_token);
+  // // const token = useSelector((state: RootState) => state.auth.user?.access_token);
 
-  // ✅ Fetch System Prompt and auto-fill "context"
+  // // ✅ Fetch System Prompt and auto-fill "context"
+  // useEffect(() => {
+  //   const fetchPrompt = async () => {
+  //     try {
+  //       setLoadingPrompt(true);
+  //       if (!token) return;
+
+  //       const response = await getSystemPrompt(token);
+  //       if (response?.system_prompt) {
+  //         // ✅ Fill “Call Context” field automatically
+  //         setValue("context", response.system_prompt);
+  //       }
+  //     } catch (err) {
+  //       const error = err as AxiosError<{ error?: string }>;
+  //       toast.error(error.response?.data?.error || "Failed to load prompt.");
+  //       console.error("Prompt fetch error:", err);
+  //     } finally {
+  //       setLoadingPrompt(false);
+  //     }
+  //   };
+
+  //   fetchPrompt();
+  // }, [token, setValue]);
+
+
+
+  // Input tel: Name or phone search in api
+  const [contacts, setContacts] = useState<{ firstName: string; phoneNumber: string }[]>([]);
+  const [filteredContacts, setFilteredContacts] = useState<typeof contacts>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on outside click
   useEffect(() => {
-    const fetchPrompt = async () => {
-      try {
-        setLoadingPrompt(true);
-        if (!token) return;
-
-        const response = await getSystemPrompt(token);
-        if (response?.system_prompt) {
-          // ✅ Fill “Call Context” field automatically
-          setValue("context", response.system_prompt);
-        }
-      } catch (err) {
-        const error = err as AxiosError<{ error?: string }>;
-        toast.error(error.response?.data?.error || "Failed to load prompt.");
-        console.error("Prompt fetch error:", err);
-      } finally {
-        setLoadingPrompt(false);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
       }
     };
 
-    fetchPrompt();
-  }, [token, setValue]);
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        if (!token) return;
+        const response = await getContacts(token); // ye ab filtered array return karega
+        setContacts(response);          // full array
+        setFilteredContacts(response);  // dropdown filter
+      } catch (err) {
+        console.error("Failed to fetch contacts", err);
+        toast.error("Failed to load contacts");
+      }
+    };
+
+    fetchContacts();
+  }, [token]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.toLowerCase();
+    setFilteredContacts(
+      contacts.filter(
+        (c) =>
+          c.phoneNumber.includes(value) || c.firstName.toLowerCase().includes(value)
+      )
+    );
+  };
+
+
+
 
 
   return (
@@ -757,10 +809,7 @@ function CallForm() {
           {/* Phone Numbers */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
 
-            <div>
-              <label className="block text-sm font-semibold text-black mb-1">
-                Number to Call
-              </label>
+            <div className="relative" ref={dropdownRef}>
               <input
                 type="tel"
                 {...register("outbound_number", {
@@ -770,16 +819,26 @@ function CallForm() {
                     message: "Enter a valid phone number",
                   },
                 })}
-                className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900  ${errors.outbound_number ? "border-red-500" : "border-gray-300"
-                  }`}
+                onFocus={() => setShowDropdown(true)}
+                onChange={handleInputChange}
+                className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900 ${errors.outbound_number ? "border-red-500" : "border-gray-300"}`}
                 placeholder="+1234567890"
               />
-              {errors.outbound_number && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.outbound_number.message}
-                </p>
+              {showDropdown && filteredContacts.length > 0 && (
+                <ul className="absolute z-50 mt-1 w-full max-h-48 overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                  {filteredContacts.map((c, idx) => (
+                    <li
+                      key={idx}
+                      onClick={() => { setValue("outbound_number", c.phoneNumber); setShowDropdown(false); }}
+                      className="px-4 py-2 cursor-pointer hover:bg-blue-100"
+                    >
+                      <span className="font-medium">{c.firstName}</span> - {c.phoneNumber}
+                    </li>
+                  ))}
+                </ul>
               )}
             </div>
+
           </div>
 
           {/* Agent Name (New Field) */}
@@ -818,12 +877,12 @@ function CallForm() {
             </label>
             <textarea
               {...register("context", { required: "Context is required" })}
-              disabled={loadingPrompt} // ✅ disable while loading
-              placeholder={
-                loadingPrompt
-                  ? "Loading system prompt..."
-                  : "Provide any additional context for the call..."
-              }
+              // disabled={loadingPrompt} // ✅ disable while loading
+              // placeholder={
+              //   loadingPrompt
+              //     ? "Loading system prompt..."
+              //     : "Provide any additional context for the call..."
+              // }
               className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900 ${errors.context ? "border-red-500" : "border-gray-300"
                 }`}
             />

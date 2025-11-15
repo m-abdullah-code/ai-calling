@@ -8,6 +8,7 @@ interface LandCardProps {
     value?: string;
     desc?: string;
     className?: string;
+    titleColor?: string;
     children?: React.ReactNode;
 }
 
@@ -20,10 +21,12 @@ const LandCard: React.FC<LandCardProps> = ({
     desc,
     className = "",
     children,
+    titleColor,
+
 }) => {
     return (
         <div
-            className={`border border-blue-900 rounded-xl p-6 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col items-center text-center ${className}`}
+            className={`border rounded-xl p-6 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col items-center text-center ${className}`}
         >
             {/* Image or Icon */}
             {img ? (
@@ -39,25 +42,30 @@ const LandCard: React.FC<LandCardProps> = ({
 
             {/* Title */}
             {title && (
-                <h3 className="text-sm font-semibold mb-2 text-black">{title}</h3>
-            )}
+                <h3 className={`text-sm font-semibold mb-2 ${titleColor}`} > {title}</h3>
+            )
+            }
 
             {/* Sub Title */}
-            {subtitle && (
-                <h3 className="text-lg font-semibold mb-2 text-blue-900">{subtitle}</h3>
-            )}
+            {
+                subtitle && (
+                    <h3 className="text-lg font-semibold mb-2 text-blue-900">{subtitle}</h3>
+                )
+            }
 
             {/* Value (Optional) */}
-            {value && (
-                <p className="font-bold text-3xl text-blue-900 mt-1 mb-1">{value}</p>
-            )}
+            {
+                value && (
+                    <p className="font-bold text-3xl text-blue-900 mt-1 mb-1">{value}</p>
+                )
+            }
 
             {/* Description */}
-            {desc && <p className="text-gray-800 text-sm">{desc}</p>}
+            {desc && <p className=" text-sm">{desc}</p>}
 
             {/* Custom Children */}
             {children && <div className="mt-2">{children}</div>}
-        </div>
+        </div >
     );
 };
 

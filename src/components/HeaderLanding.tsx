@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
+import { FaChevronDown, FaRegUserCircle } from "react-icons/fa";
+import type { RootState } from "../store/store";
+import { logout } from "../store/slices/authSlice";
+import { Link } from "react-router-dom";
 
 function HeaderLanding() {
 
@@ -12,7 +17,18 @@ function HeaderLanding() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const menuItems = ["Home", "About", "Services", "Contact"];
+    const menuItems = [
+        { key: "home", label: "Home" },
+        { key: "about", label: "About" },
+        { key: "services", label: "Services" },
+        { key: "contact", label: "Contact" }
+    ];
+
+    // Logged In user
+    const dispatch = useDispatch();
+    const { user } = useSelector((state: RootState) => state.auth);
+
+    const [openDropdown, setOpenDropdown] = useState(false);
 
     return (
         <>
@@ -33,42 +49,93 @@ function HeaderLanding() {
 
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex items-center space-x-6">
-                        {menuItems.map((item, index) => (
+                        {menuItems.map((item) => (
                             <li
-                                key={index}
+                                key={item.key}
                                 className={`list-none cursor-pointer font-semibold transition-colors duration-200 text-base ${isScrolled
                                     ? "text-blue-900 hover:text-blue-700"
                                     : "text-white hover:text-blue-900"
                                     }`}
                             >
-                                {item}
+                                {item.label}
                             </li>
                         ))}
                     </nav>
 
                     {/* Desktop Auth Buttons */}
                     <div className="hidden md:flex space-x-3">
-                        <a
-                            href="#"
-                            className={`h-9 sm:h-10 px-3 sm:px-5 text-sm sm:text-base rounded-md font-semibold flex items-center justify-center transition-all duration-300
-      ${isScrolled
-                                    ? "bg-white text-blue-900 border border-blue-900 hover:bg-blue-900 hover:text-white"
-                                    : "bg-white text-blue-900 hover:bg-blue-900 hover:text-white"
-                                }`}
-                        >
-                            Sign Up
-                        </a>
 
-                        <a
-                            href="#"
-                            className={`h-9 sm:h-10 px-3 sm:px-5 text-sm sm:text-base rounded-md font-semibold flex items-center justify-center transition-all duration-300
+                        {/* IF USER IS LOGGED IN */}
+                        {user ? (
+                            <div className="relative">
+                                <button
+                                    onClick={() => setOpenDropdown(!openDropdown)}
+                                    className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer"
+                                >
+
+                                    {/* 5 Characters + ... */}
+                                    <span className="font-semibold text-[#fff]">
+                                        {user.email.slice(0, 5)}...
+                                    </span>
+
+                                    <FaRegUserCircle className="text-white" size={24} />
+                                    <FaChevronDown className="text-white" size={12} />
+                                </button>
+
+
+                                {/* DROPDOWN */}
+                                {openDropdown && (
+                                    <div className="absolute right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg">
+
+                                        {/* FULL EMAIL SHOW */}
+                                        <div className="px-4 py-2 border-b border-gray-200 text-[#3d4b52]/70">
+                                            {user.email}
+                                        </div>
+
+                                        <Link
+                                            to="/dashboard"
+                                            className="block px-4 py-2 hover:bg-gray-100 text-[#3d4b52]"
+                                        >
+                                            Dashboard
+                                        </Link>
+
+                                        <button
+                                            onClick={() => dispatch(logout())}
+                                            className="w-full text-left px-4 py-2 hover:bg-gray-100 text-[#3d4b52] cursor-pointer"
+                                        >
+                                            Logout
+                                        </button>
+                                    </div>
+                                )}
+
+                            </div>
+                        ) : (
+                            <>
+                                {/* IF USER IS NOT LOGGED IN → SHOW SIGNUP + LOGIN */}
+
+                                <Link
+                                    to="/signup"
+                                    className={`h-9 sm:h-10 px-3 sm:px-5 text-sm sm:text-base rounded-md font-semibold flex items-center justify-center transition-all duration-300
       ${isScrolled
-                                    ? "bg-white text-blue-900 border border-blue-900 hover:bg-blue-900 hover:text-white"
-                                    : "bg-white text-blue-900 hover:bg-blue-900 hover:text-white"
-                                }`}
-                        >
-                            Login
-                        </a>
+                                            ? "bg-white text-blue-900 border border-blue-900 hover:bg-blue-900 hover:text-white"
+                                            : "bg-white text-blue-900 hover:bg-blue-900 hover:text-white"
+                                        }`}
+                                >
+                                    Sign Up
+                                </Link>
+
+                                <Link
+                                    to="/signin"
+                                    className={`h-9 sm:h-10 px-3 sm:px-5 text-sm sm:text-base rounded-md font-semibold flex items-center justify-center transition-all duration-300
+      ${isScrolled
+                                            ? "bg-white text-blue-900 border border-blue-900 hover:bg-blue-900 hover:text-white"
+                                            : "bg-white text-blue-900 hover:bg-blue-900 hover:text-white"
+                                        }`}
+                                >
+                                    Login
+                                </Link>
+                            </>
+                        )}
                     </div>
 
 
@@ -97,33 +164,73 @@ function HeaderLanding() {
                     <div className="flex flex-col items-center mt-20 space-y-6">
                         {/* Nav Links */}
                         <ul className="flex flex-col items-center space-y-3">
-                            {menuItems.map((item, index) => (
+                            {menuItems.map((item) => (
                                 <li
-                                    key={index}
+                                    key={item.key}
                                     onClick={() => setMenuOpen(false)}
                                     className="cursor-pointer text-blue-900 font-semibold text-lg hover:text-blue-700 transition-colors duration-200"
                                 >
-                                    {item}
+                                    {item.label}
                                 </li>
                             ))}
                         </ul>
 
                         {/* Auth Buttons */}
                         <div className="flex flex-col space-y-3 w-[80%] mt-10">
-                            <a
-                                href="#"
-                                onClick={() => setMenuOpen(false)}
-                                className="bg-blue-900 text-white py-2 rounded-md font-semibold hover:bg-blue-800 text-center transition-all"
-                            >
-                                Sign Up
-                            </a>
-                            <a
-                                href="#"
-                                onClick={() => setMenuOpen(false)}
-                                className="bg-white border border-blue-900 text-blue-900 py-2 rounded-md font-semibold hover:bg-blue-900 hover:text-white text-center transition-all"
-                            >
-                                Login
-                            </a>
+                            {user ? (
+                                <div className="relative w-full">
+                                    <button
+                                        onClick={() => setOpenDropdown(!openDropdown)}
+                                        className="flex items-center justify-between w-full px-4 py-2 rounded-md border border-blue-900 bg-blue-900 text-white font-semibold"
+                                    >
+                                        <span>{user.email.slice(0, 5)}...</span>
+                                        <FaChevronDown />
+                                    </button>
+
+                                    {openDropdown && (
+                                        <div className="absolute top-12 left-0 w-full bg-white border border-gray-200 rounded-md shadow-lg z-50 flex flex-col">
+                                            <div className="px-4 py-2 border-b text-gray-700">
+                                                {user.email}
+                                            </div>
+
+                                            <Link
+                                                to="/dashboard"
+                                                onClick={() => setMenuOpen(false)}
+                                                className="px-4 py-2 hover:bg-gray-100 text-gray-700"
+                                            >
+                                                Dashboard
+                                            </Link>
+
+                                            <button
+                                                onClick={() => {
+                                                    dispatch(logout());
+                                                    setMenuOpen(false);
+                                                }}
+                                                className="px-4 py-2 hover:bg-gray-100 text-gray-700 text-left w-full"
+                                            >
+                                                Logout
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <>
+                                    <Link
+                                        to="/signup"
+                                        onClick={() => setMenuOpen(false)}
+                                        className="bg-blue-900 text-white py-2 rounded-md font-semibold hover:bg-blue-800 text-center transition-all"
+                                    >
+                                        Sign Up
+                                    </Link>
+                                    <Link
+                                        to="/signin"
+                                        onClick={() => setMenuOpen(false)}
+                                        className="bg-white border border-blue-900 text-blue-900 py-2 rounded-md font-semibold hover:bg-blue-900 hover:text-white text-center transition-all"
+                                    >
+                                        Login
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

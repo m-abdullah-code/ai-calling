@@ -1202,7 +1202,7 @@ const Dashboard = () => {
                       <td className="px-4 py-2 text-center whitespace-nowrap">
                         <button
                           onClick={() => handleOpenModal(row)}
-                          className="px-4 py-2 cursor-pointer text-sm font-medium bg-blue-500 text-white rounded-lg hover:scale-105 transition"
+                          className="px-4 py-2 cursor-pointer text-sm font-medium bg-blue-900 text-white rounded-lg hover:scale-105 transition"
                         >
                           Details
                         </button>

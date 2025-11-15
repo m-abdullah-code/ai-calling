@@ -60,3 +60,45 @@ export const getSystemPrompt = async (token: string) => {
   });
   return response.data;
 };
+
+
+
+// ✅ POST: Upload Excel File
+export const uploadContactsFile = async (file: File, token: string) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await axiosInstance.post(
+    `${API_URL}/contacts/upload`,
+    formData,
+    {
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+        Accept: "application/json",
+      },
+    }
+  );
+
+  return response.data;
+};
+
+
+
+// GET contacts for CallForm autocomplete
+export const getContacts = async (token: string) => {
+  const response = await axiosInstance.get(`${API_URL}/contacts`, {
+    headers: {
+      "ngrok-skip-browser-warning": "true",
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    },
+  });
+  // response.contacts me array hai
+  // sirf name & phone_number return karo
+  return response.data.contacts.map((c: any) => ({
+    firstName: c.name,
+    phoneNumber: c.phone_number,
+  }));
+};

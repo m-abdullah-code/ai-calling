@@ -1,13 +1,9 @@
-// import { FiDownload } from "react-icons/fi";
 import { useForm } from "react-hook-form";
-// import { TiArrowRight } from "react-icons/ti";
 import { useNavigate } from "react-router-dom";
 import type { SignupData } from "../../interfaces/auth";
 import {
   signupFailure,
   signupStart,
-  //   signupFailure,
-  //   signupStart,
   signupSuccess,
 } from "../../store/slices/authSlice";
 import { signupUser } from "../../api/auth";
@@ -18,6 +14,8 @@ import type { AxiosError } from "axios";
 
 const SignUp: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { user, signupLoading } = useSelector((state: RootState) => state.auth);
   console.log(user, "user");
 
@@ -25,86 +23,65 @@ const SignUp: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-    // watch,
     reset,
   } = useForm<SignupData>();
 
   const onSubmit = async (data: SignupData) => {
-    // console.log(data, "DATA SIGNUP");
     try {
       dispatch(signupStart());
       const response = await signupUser(data);
-      // console.log(response, "RESPONSE");
+
       dispatch(signupSuccess(response));
       toast.success("Sign-up successful! Please Sign in");
       reset();
-      navigate("/");
+      navigate("/signin");
     } catch (err: unknown) {
       const error = err as AxiosError<{ error: string }>;
+
       toast.error(error?.response?.data?.error || "Oops an error occurred");
       dispatch(signupFailure(error.message));
-
-      // console.error(err);
-      // //   dispatch(signupFailure(err.message));
-      // toast.error("Sign-up failed. Please try again");
-      // console.log(err);
     }
   };
 
-  //   const onSubmit: SubmitHandler<SignInFormInputs> = (data) => {
-  //     console.log("Form Submitted:", data);
-  //     reset();
-  //   };
-
-  const navigate = useNavigate();
-
   const handleNavigate = () => {
-    navigate("/");
+    navigate("/signin");
   };
-
-  // const passwordValue = watch("password");
 
   return (
     <div className="min-h-screen flex items-center justify-center gradient-rotate">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white shadow-lg rounded-xl p-5 md:p-8 w-full max-w-md text-center m-5 md:p-0"
+        className="bg-white shadow-lg rounded-xl p-5 md:p-8 w-full max-w-md text-center m-5"
       >
-        {/* Rotated Download Icon */}
+        {/* Header */}
         <div className="flex justify-center mb-2 mt-5">
-          {/* <div className="bg-gradient-to-l bg-gradient-to-l from-[#05A3A9] to-[#6BEE2E] p-2 rounded-lg shadow-lg"> */}
-          {/* <div className="bg-gradient-to-r from-[#6d0f78] to-[#0a0f2d] p-2 rounded-lg shadow-lg">
-            <FiDownload className="text-white text-4xl rotate-270" />
-          </div> */}
-          <div className="text-blue-900 font-base font-bold">Start your Journey</div>
+          <div className="text-blue-900 font-base font-bold">
+            Start your Journey
+          </div>
         </div>
 
-        {/* Title */}
         <h2 className="text-2xl font-bold text-gray-800 mb-2 mt-2">
           Sign up to continue
         </h2>
-        {/* <p className="text-gray-500 text-base mb-6 leading-tight">
-          Welcome! Please create your account
-        </p> */}
 
-        {/*Username*/}
-        <label className=" block mb-5 font-semibold text-sm text-left">
-          {" "}
+        {/* Username */}
+        <label className="block mb-5 font-semibold text-sm text-left">
           Username
           <input
             type="text"
             placeholder="Username"
-            {...register("username", { required: "Email is required" })}
+            {...register("username", { required: "Username is required" })}
             className="w-full px-4 py-2 mb-1 border border-gray-300 mt-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-900 placeholder-gray-300"
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm mb-3">{errors.email.message}</p>
+          {errors.username && (
+            <p className="text-red-500 text-sm mb-3">
+              {errors.username.message}
+            </p>
           )}
         </label>
 
         {/* Email */}
-        <label className=" block mb-5 font-semibold text-sm  text-left">
-          {" "}
+        <label className="block mb-5 font-semibold text-sm text-left">
           Email
           <input
             type="email"
@@ -113,13 +90,14 @@ const SignUp: React.FC = () => {
             className="w-full px-4 py-2 mb-1 border border-gray-300 mt-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-900 placeholder-gray-300"
           />
           {errors.email && (
-            <p className="text-red-500 text-sm mb-3">{errors.email.message}</p>
+            <p className="text-red-500 text-sm mb-3">
+              {errors.email.message}
+            </p>
           )}
         </label>
 
         {/* Password */}
-        <label className=" block mb-8 font-semibold text-sm text-left">
-          {" "}
+        <label className="block mb-8 font-semibold text-sm text-left">
           Password
           <input
             type="password"
@@ -134,35 +112,6 @@ const SignUp: React.FC = () => {
           )}
         </label>
 
-        {/* Confirm Password */}
-        {/* <label className=" block mb-8 font-normal text-left">
-          {" "}
-          Confirm Password
-          <input
-            type="password"
-            placeholder="Password"
-            {...register("confirm_password", {
-              required: "Confirm Password is required",
-              validate: (value) =>
-                value === passwordValue || "Passwords do not match",
-            })}
-            className="w-full px-4 py-2 mb-1 border border-gray-300 rounded-lg mt-2 focus:outline-none focus:ring-1 focus:ring-purple-400 placeholder-gray-300"
-          />
-          {errors.confirm_password && (
-            <p className="text-red-500 text-sm mb-5">
-              {errors.confirm_password.message}
-            </p>
-          )}
-        </label> */}
-
-        {/* Sign In Button */}
-        {/* <button
-          type="submit"
-          className="w-full cursor-pointer flex items-center justify-center gap-2 bg-gradient-to-r from-[#6d0f78] to-[#0a0f2d] text-white py-2 rounded-lg transition-all"
-        >
-          Sign Up
-          <TiArrowRight size={24} className="mt-1" />
-        </button> */}
         {/* Submit Button */}
         <button
           type="submit"
@@ -197,14 +146,11 @@ const SignUp: React.FC = () => {
               Signing Up...
             </span>
           ) : (
-            <>
-              Sign Up
-              {/* <TiArrowRight size={24} className="mt-1" /> */}
-            </>
+            <>Sign Up</>
           )}
         </button>
 
-        {/* Bottom text */}
+        {/* Bottom */}
         <p className="mt-4 text-sm text-gray-500">
           Already have an account?{" "}
           <button
@@ -214,8 +160,6 @@ const SignUp: React.FC = () => {
             Sign in now
           </button>
         </p>
-        {/* {loading && <p className="text-blue-500">Signing up...</p>} */}
-        {/* {error && <p className="text-red-500">{error}</p>} */}
       </form>
     </div>
   );

@@ -37,7 +37,7 @@ const SignIn: React.FC = () => {
       dispatch(loginSuccess({ user, token }));
 
       toast.success("Sign-in successful!");
-      navigate("/dashboard");
+      navigate("/");
       reset();
     } catch (err: unknown) {
       const error = err as AxiosError<{ error: string }>;
@@ -51,6 +51,10 @@ const SignIn: React.FC = () => {
   const handleNavigate = () => {
     navigate("/signup");
   };
+
+  const loginNavigate = () => {
+    navigate("/")
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center gradient-rotate">
@@ -122,6 +126,7 @@ const SignIn: React.FC = () => {
         <button
           type="submit"
           disabled={loginLoading}
+          onClick={loginNavigate}
           // className={`w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#6d0f78] to-[#0a0f2d] text-white py-2 rounded-lg transition-all cursor-pointer ${
           className={`w-full flex items-center justify-center gap-2 bg-blue-900 hover:opacity-90 text-white py-2 rounded-lg transition-all cursor-pointer ${loginLoading ? "opacity-70 cursor-not-allowed" : ""
             }`}

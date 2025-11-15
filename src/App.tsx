@@ -9,6 +9,7 @@ import PrivateRoute from "./routes/private";
 import CallForm from "./pages/CallForm";
 import AddPrompt from "./pages/AddPrompt";
 import LandingPage from "./pages/LandingPage";
+import UploadCsv from "./pages/UploadCsv";
 
 function App() {
   return (
@@ -16,15 +17,15 @@ function App() {
       <Router>
         <Routes>
           <Route
-            path="/landing-page"
+            path="/"
             element={
-              <PublicRoute>
-                <LandingPage />
-              </PublicRoute>
+              // <PublicRoute>
+              <LandingPage />
+              // </PublicRoute>
             }
           />
           <Route
-            path="/"
+            path="/signin"
             element={
               <PublicRoute>
                 <SignIn />
@@ -56,6 +57,14 @@ function App() {
             }
           />
           <Route
+            path="/upload-csv"
+            element={
+              <PrivateRoute>
+                <UploadCsv />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/call"
             element={
               <PrivateRoute>
@@ -66,6 +75,7 @@ function App() {
         </Routes>
       </Router>
       <Toaster position="top-right" reverseOrder={false} />
+      <Toaster position="top-right" />
     </>
   );
 }

@@ -87,11 +87,24 @@ function HeaderLanding() {
                   className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer"
                 >
                   {/* 5 Characters + ... */}
-                  <span className="font-semibold text-[#fff]">
+                  {/* <span className="font-semibold text-[#fff]">
+                    {user.email.slice(0, 5)}...
+                  </span> */}
+                  <span
+                    className={`font-semibold ${
+                      isScrolled ? "text-[#13243C]" : "text-white"
+                    }`}
+                  >
                     {user.email.slice(0, 5)}...
                   </span>
 
-                  <FaRegUserCircle className="text-white" size={24} />
+                  {/* <FaRegUserCircle className="text-white" size={24} /> */}
+                  <FaRegUserCircle
+                    className={`${
+                      isScrolled ? "text-[#13243C]" : "text-white"
+                    }`}
+                    size={24}
+                  />
                   <FaChevronDown className="text-white" size={12} />
                 </button>
 
@@ -99,7 +112,14 @@ function HeaderLanding() {
                 {openDropdown && (
                   <div className="absolute right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg">
                     {/* FULL EMAIL SHOW */}
-                    <div className="px-4 py-2 border-b border-gray-200 text-[#3d4b52]/70">
+                    {/* <div className="px-4 py-2 border-b border-gray-200 text-[#3d4b52]/70">
+                      {user.email}
+                    </div> */}
+                    <div
+                      className={`font-semibold ${
+                        isScrolled ? "text-[#13243C]" : "text-white"
+                      }`}
+                    >
                       {user.email}
                     </div>
 

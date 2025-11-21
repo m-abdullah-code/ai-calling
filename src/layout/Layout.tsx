@@ -33,7 +33,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
 
       {/* Main Content (scrollable) */}
-      <main className="lg:ml-64 flex-1 min-h-screen overflow-y-auto bg-[#fafafa] p-6">
+      <main className="lg:ml-64 flex-1 min-h-screen bg-[#fafafa] p-6">
         {children}
       </main>
     </div>

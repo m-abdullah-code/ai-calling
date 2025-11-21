@@ -3,9 +3,24 @@ import type { CallFormInputs } from "../interfaces/callForm";
 import axiosInstance from "./axiosInterceptor";
 const API_URL = import.meta.env.VITE_API_URL as string;
 
+// export const initiateCall = async (data: CallFormInputs, token: string) => {
+//   const response = await axiosInstance.post(
+//     `${API_URL}/assistant-initiate-call`,
+//     data,
+//     {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//         Accept: "application/json",
+//       },
+//     }
+//   );
+//   return response.data;
+// };
+
 export const initiateCall = async (data: CallFormInputs, token: string) => {
   const response = await axiosInstance.post(
-    `${API_URL}/assistant-initiate-call`,
+    `${API_URL}/assistant-bulk-call`,
     data,
     {
       headers: {
@@ -97,4 +112,71 @@ export const getContacts = async (token: string) => {
     firstName: c.name,
     phoneNumber: c.phone_number,
   }));
+};
+
+
+// Post create prompt
+export const createPrompt = async (data: CallFormInputs, token: string) => {
+  const response = await axiosInstance.post(
+    `${API_URL}/prompts`,
+    data,
+    {
+      headers: {
+        "ngrok-skip-browser-warning": "true ",
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }
+  );
+  return response.data;
+};
+
+// get all prompts
+export const getAllPrompt = async (token: string) => {
+  const response = await axiosInstance.get(
+    `${API_URL}/prompts`,
+    {
+      headers: {
+        "ngrok-skip-browser-warning": "true ",
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }
+  );
+  return response.data.prompts; 
+};
+
+
+// Post Update prompt
+export const updatePrompt = async (prompt_id: number, data: any, token: string) => {
+  const response = await axiosInstance.put(
+    `${API_URL}/prompts/${prompt_id}`,
+    data,
+    {
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }
+  );
+  return response.data;
+};
+
+// Delete Prompt
+export const deletePrompt = async (prompt_id: number, token: string) => {
+  const response = await axiosInstance.delete(
+    `${API_URL}/prompts/${prompt_id}`,
+    {
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+  return response.data;
 };

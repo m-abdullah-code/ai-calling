@@ -547,25 +547,20 @@ import {
   resetCall,
   setTranscript,
   togglePopup,
-  //   togglePopup,
 } from "../store/slices/callForm";
 import { useDispatch, useSelector } from "react-redux";
-import { checkCallStatus, initiateCall, getContacts } from "../api/Call";
-// import { useNavigate } from "react-router-dom";
+import { checkCallStatus, initiateCall, getContacts, getAllPrompt } from "../api/Call";
 import type { RootState } from "../store/store";
 import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoCall } from "react-icons/io5";
 import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
-// import { useState } from "react";
-// import type { TranscriptLine } from "../interfaces/dashboard";
-// import { useNavigate } from "react-router-dom";
 
 function CallForm() {
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
-  //   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -577,19 +572,17 @@ function CallForm() {
       caller_name: user?.username || "",
       caller_email: user?.email || "",
       caller_number: "",
-      outbound_number: "",
+      phone_numbers: [],
       objective: "",
       context: "",
+      system_prompt: "",
       language: user?.language || "en",
       voice: "",
     },
   });
+
   const dispatch = useDispatch();
-  //   const navigate = useNavigate();
-  //   const [openPopup, setOpenPopup] = useState(false);
-  //   const [callId, setCallId] = useState<string | null>(null);
-  //   const [polling, setPolling] = useState<NodeJS.Timeout | null>(null);
-  //   const [transcript, setTranscript] = useState<TranscriptLine[]>([]);
+
   const token = useSelector(
     (state: RootState) => state.auth.user?.access_token
   );
@@ -613,10 +606,6 @@ function CallForm() {
       localStorage.setItem("lastCallId", res.call_id);
       localStorage.setItem("callerEmail", values.caller_email);
     } catch (err: unknown) {
-      // let message = "Failed to create call";
-      // if (err instanceof Error) {
-      //   message = err.message;
-      // }
       const error = err as AxiosError<{ error: string }>;
       toast.error(error?.response?.data?.error || "Oops an error occurred");
       dispatch(createCallFailure(error.message));
@@ -628,20 +617,20 @@ function CallForm() {
     try {
       const res = await checkCallStatus(id, token);
 
-      // ✅ full response dispatch karo
+      // full response dispatch karo
       dispatch(setTranscript(res));
 
-      // ✅ check status & stop polling
+      // check status & stop polling
       if (
         res.status === "completed" ||
         res.status === "busy" ||
         res.status === "ended" ||
         res.status === "unanswered"
       ) {
-        if (interval) clearInterval(interval); // 👈 stop API hits
+        if (interval) clearInterval(interval); // stop API hits
         dispatch(togglePopup(false));
 
-        navigate("/call"); // 👈 redirect to dashboard
+        navigate("/call"); // redirect to dashboard
         reset();
       }
     } catch (err) {
@@ -654,7 +643,7 @@ function CallForm() {
     let interval: number;
     if (openPopup && callId) {
       interval = setInterval(() => {
-        handlePoll(callId, interval); // 👈 pass interval ref
+        handlePoll(callId, interval); // pass interval ref
       }, 3000);
     }
     return () => {
@@ -662,33 +651,6 @@ function CallForm() {
     };
   }, [openPopup, callId, token]);
 
-  // const [loadingPrompt, setLoadingPrompt] = useState<boolean>(false);
-
-  // // const token = useSelector((state: RootState) => state.auth.user?.access_token);
-
-  // // ✅ Fetch System Prompt and auto-fill "context"
-  // useEffect(() => {
-  //   const fetchPrompt = async () => {
-  //     try {
-  //       setLoadingPrompt(true);
-  //       if (!token) return;
-
-  //       const response = await getSystemPrompt(token);
-  //       if (response?.system_prompt) {
-  //         // ✅ Fill “Call Context” field automatically
-  //         setValue("context", response.system_prompt);
-  //       }
-  //     } catch (err) {
-  //       const error = err as AxiosError<{ error?: string }>;
-  //       toast.error(error.response?.data?.error || "Failed to load prompt.");
-  //       console.error("Prompt fetch error:", err);
-  //     } finally {
-  //       setLoadingPrompt(false);
-  //     }
-  //   };
-
-  //   fetchPrompt();
-  // }, [token, setValue]);
 
   // Input tel: Name or phone search in api
   const [contacts, setContacts] = useState<
@@ -732,20 +694,78 @@ function CallForm() {
     fetchContacts();
   }, [token]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.toLowerCase();
-    setFilteredContacts(
-      contacts.filter(
-        (c) =>
-          c.phoneNumber.includes(value) ||
-          c.firstName.toLowerCase().includes(value)
-      )
-    );
+
+  // Number Input || Select multiple number
+  const [selectedNumbers, setSelectedNumbers] = useState<string[]>([]);
+  const [typedValue, setTypedValue] = useState("");
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleRemoveNumber = (num: string) => {
+    const updated = selectedNumbers.filter((n) => n !== num);
+    setSelectedNumbers(updated);
+
+    setValue("phone_numbers", updated, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
   };
+
+  let newNum = typedValue.trim();
+
+  // Auto add "+"
+  if (!newNum.startsWith("+")) {
+    newNum = "+" + newNum;
+  }
+
+
+
+
+  // Call Context Dropdown || show all prompt_name
+
+  const [prompts, setPrompts] = useState<any[]>([]);
+  const [typedContext, setTypedContext] = useState("");
+  const [showPromptDropdown, setShowPromptDropdown] = useState(false);
+
+  useEffect(() => {
+    async function fetchPrompts() {
+      try {
+        if (!token) return;
+        const response = await getAllPrompt(token);
+        setPrompts(response);
+      } catch (err) {
+        console.error("Error loading prompts", err);
+      }
+    }
+    fetchPrompts();
+  }, [token]);
+
+  // Optional: close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const input = document.querySelector<HTMLInputElement>(
+        'input[name="context"]'
+      );
+      if (
+        !input?.contains(event.target as Node) &&
+        !(event.target as HTMLElement).closest(".dropdown")
+      ) {
+        setShowPromptDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+
+
+
+
+
+
 
   return (
     <>
-      {/* <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8"> */}
+
       <div className="max-w-3xl mx-auto p-8 mt-8">
         <h1 className="text-2xl sm:text-4xl font-bold text-center mb-10 text-[#13243C]">
           Let AI Handle Your Next Call
@@ -786,9 +806,8 @@ function CallForm() {
                   },
                 })}
                 className={`w-full px-4 hover:border-blue-900
- py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900  ${
-   errors.caller_email ? "border-red-500" : "border-gray-300"
- }`}
+ py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900  ${errors.caller_email ? "border-red-500" : "border-gray-300"
+                  }`}
                 placeholder="name@example.com"
               />
               {errors.caller_email && (
@@ -801,44 +820,123 @@ function CallForm() {
 
           {/* Phone Numbers */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+
             <div className="relative" ref={dropdownRef}>
               <label className="block text-sm font-semibold text-[#13243C] mb-1">
                 Phone Number
               </label>
-              <input
-                type="tel"
-                {...register("outbound_number", {
-                  required: "Outbound number is required",
-                  pattern: {
-                    value: /^\+?[1-9]\d{1,14}$/,
-                    message: "Enter a valid phone number",
-                  },
-                })}
-                onFocus={() => setShowDropdown(true)}
-                onChange={handleInputChange}
-                className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900 ${
-                  errors.outbound_number ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="+1234567890"
-              />
+
+              <div
+                className={`flex flex-wrap items-center gap-1 w-full min-h-[42px] px-2 py-1 border rounded-md 
+      ${errors.phone_numbers ? "border-red-500" : "border-gray-300"}
+      hover:border-blue-900 focus-within:ring-1 focus-within:ring-blue-900`}
+                onClick={() => inputRef.current?.focus()}
+              >
+                {/* TAGS */}
+                {selectedNumbers.map((num) => (
+                  <span
+                    key={num}
+                    className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center gap-1"
+                  >
+                    {num}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveNumber(num)}
+                      className="font-bold cursor-pointer"
+                    >
+                      &times;
+                    </button>
+                  </span>
+                ))}
+
+                {/* INPUT FIELD */}
+                <input
+                  ref={inputRef}
+                  type="text"
+                  // disabled={selectedNumbers.length >= 15}
+                  value={typedValue}
+                  onFocus={() => setShowDropdown(true)}
+                  onChange={(e) => {
+                    setTypedValue(e.target.value);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === "," || e.key === " ") {
+                      e.preventDefault();
+
+                      let newNum = typedValue.trim();
+                      if (!newNum) return;
+
+                      // STEP 1: Auto add "+"
+                      if (!newNum.startsWith("+")) {
+                        newNum = "+" + newNum;
+                      }
+
+                      // STEP 2: Duplicate check
+                      if (selectedNumbers.includes(newNum)) {
+                        toast.error("Number already selected");
+                        setTypedValue("");
+                        return;
+                      }
+
+                      // // STEP 3: Max limit check
+                      // if (selectedNumbers.length >= 15) {
+                      //   toast.error("Max 15 numbers allowed");
+                      //   return;
+                      // }
+
+                      // STEP 4: Add to tags
+                      const updated = [...selectedNumbers, newNum];
+                      setSelectedNumbers(updated);
+                      setValue("phone_numbers", updated);
+
+                      // Clear typed input
+                      setTypedValue("");
+                    }
+                  }}
+
+                  className="flex-1 outline-none py-1"
+                  placeholder="+1234567890"
+                />
+              </div>
+
+              {/* DROPDOWN */}
               {showDropdown && filteredContacts.length > 0 && (
                 <ul className="absolute z-50 mt-1 w-full max-h-48 overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg">
                   {filteredContacts.map((c, idx) => (
                     <li
                       key={idx}
                       onClick={() => {
-                        setValue("outbound_number", c.phoneNumber);
-                        setShowDropdown(false);
+                        let number = c.phoneNumber;
+                        if (!number.startsWith("+")) {
+                          number = "+" + number;
+                        }
+
+                        if (selectedNumbers.includes(number)) {
+                          toast.error("Number already selected");
+                          return;
+                        }
+
+                        // if (selectedNumbers.length >= 15) {
+                        //   toast.error("Max 15 numbers allowed");
+                        //   return;
+                        // }
+
+                        const updated = [...selectedNumbers, number];
+                        setSelectedNumbers(updated);
+                        setValue("phone_numbers", updated);
+                        setTypedValue("");
                       }}
+
+
                       className="px-4 py-2 cursor-pointer hover:bg-blue-100"
                     >
-                      <span className="font-medium">{c.firstName}</span> -{" "}
-                      {c.phoneNumber}
+                      <span className="font-medium">{c.firstName}</span> - {c.phoneNumber}
                     </li>
                   ))}
                 </ul>
               )}
             </div>
+
           </div>
 
           {/* Agent Name (New Field) */}
@@ -848,9 +946,8 @@ function CallForm() {
             </label>
             <select
               {...register("voice", { required: "Agent name is required" })}
-              className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900 ${
-                errors.voice ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900 ${errors.voice ? "border-red-500" : "border-gray-300"
+                }`}
             >
               <option value="">Select Agent</option>
               <option value="david">David - english (Male)</option>
@@ -871,30 +968,54 @@ function CallForm() {
             )}
           </div>
 
-          {/* Context */}
-          <div>
+          {/* Call Context Input */}
+          <div className="relative w-full">
             <label className="block text-sm font-semibold text-[#13243C] mb-1">
               Call Context
             </label>
-            <textarea
+
+            <input
               {...register("context", { required: "Context is required" })}
-              // disabled={loadingPrompt} // ✅ disable while loading
-              // placeholder={
-              //   loadingPrompt
-              //     ? "Loading system prompt..."
-              //     : "Provide any additional context for the call..."
-              // }
-              className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900 ${
-                errors.context ? "border-red-500" : "border-gray-300"
-              }`}
+              value={typedContext} // controlled input
+              onChange={(e) => {
+                setTypedContext(e.target.value);
+                setValue("context", e.target.value); // update RHF
+                setShowPromptDropdown(true);
+              }}
+              onFocus={() => setShowPromptDropdown(true)}
+              className={`w-full px-4 py-2 border rounded-md hover:border-blue-900
+              focus:outline-none focus:ring-1 focus:ring-blue-900 
+              ${errors.context ? "border-red-500" : "border-gray-300"}`}
             />
 
             {errors.context && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.context.message}
-              </p>
+              <p className="text-red-500 text-xs mt-1">{errors.context.message}</p>
+            )}
+
+            {showPromptDropdown && prompts.length > 0 && (
+              <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-60 overflow-y-auto shadow-md dropdown">
+                {prompts
+                  .filter((p) =>
+                    p.prompt_name.toLowerCase().includes(typedContext.toLowerCase())
+                  )
+                  .map((prompt) => (
+                    <div
+                      key={prompt.id}
+                      className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
+                      onClick={() => {
+                        setTypedContext(prompt.prompt_name);
+                        setValue("context", prompt.prompt_name);
+                        setValue("system_prompt", prompt.system_prompt);
+                        setShowPromptDropdown(false);
+                      }}
+                    >
+                      {prompt.prompt_name}
+                    </div>
+                  ))}
+              </div>
             )}
           </div>
+
 
           {/* Language */}
           <div>
@@ -925,56 +1046,6 @@ function CallForm() {
       {/* ==== Popup ==== */}
 
       {openPopup && (
-        // <div
-        //   className="fixed inset-0 flex items-center justify-center z-50 bg-black/60 backdrop-blur-md"
-        //   onClick={() => dispatch(togglePopup(false))}
-        // >
-        //   <div
-        //     className="relative bg-gradient-to-br from-[#ffffff10] to-[#e9f0ff40] border border-blue-300/40 rounded-2xl shadow-2xl w-[90%] sm:w-[70%] md:w-[45%] text-center p-6 backdrop-blur-lg"
-        //     onClick={(e) => e.stopPropagation()}
-        //   >
-        //     <div className="absolute inset-0 rounded-2xl border border-blue-400/30 animate-[pulseBorder_3s_ease-in-out_infinite] pointer-events-none"></div>
-
-        //     <h2 className="text-3xl font-bold text-blue-900 mb-6 tracking-wide">
-        //       Call Initiated
-        //     </h2>
-
-        //     <div className="flex flex-wrap items-center justify-center mb-6 text-gray-800">
-        //       <span className="font-medium">Call ID:</span>
-        //       <span className="ml-3 text-blue-700 font-semibold">{callId}</span>
-        //     </div>
-
-        //     <div className="flex flex-col items-center justify-center">
-        //       <div className="relative w-28 h-28 flex items-center justify-center">
-        //         <div className="absolute w-full h-full rounded-full border-4 border-blue-400/30 animate-spin-slow"></div>
-        //         <div className="absolute w-[80%] h-[80%] rounded-full border-4 border-blue-500/50 animate-spin-reverse"></div>
-
-        //         <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center shadow-[0_0_30px_#3b82f6aa] animate-pulse">
-        //           <IoCall color="white" size={36} className="animate-bounce" />
-        //         </div>
-        //       </div>
-
-        //       <p className="mt-6 text-lg font-semibold text-blue-900 animate-pulse">
-        //         {status ?? "Connecting..."}
-        //       </p>
-        //     </div>
-
-        //     <div className="mt-8 border-t border-blue-200/50 pt-6 flex justify-center space-x-4">
-        //       <button
-        //         onClick={() => callId && handlePoll(callId)}
-        //         className="px-6 py-2 bg-gradient-to-r from-blue-700 to-blue-900 text-white rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
-        //       >
-        //         Check Status Now
-        //       </button>
-        //       <button
-        //         onClick={() => dispatch(togglePopup(false))}
-        //         className="px-6 py-2 border border-blue-900 text-blue-900 rounded-lg hover:bg-blue-50 transition-all duration-300"
-        //       >
-        //         Close
-        //       </button>
-        //     </div>
-        //   </div >
-        // </div >
 
         <div
           className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm"
@@ -989,14 +1060,14 @@ function CallForm() {
             <h2 className="text-3xl text-[#13243C] text-center font-bold mb-4 p-5">
               Call Initiated
             </h2>{" "}
-            <div className="flex flex-wrap items-center mb-4 px-6">
+            {/* <div className="flex flex-wrap items-center mb-4 px-6">
               {" "}
               <span className="font-medium">Call ID:</span>{" "}
               <span className="md:px-3 md:mx-5 py-1 text-gray-700 rounded-lg">
                 {" "}
                 {callId}{" "}
               </span>{" "}
-            </div>{" "}
+            </div>{" "} */}
             <div className="rounded-lg">
               {" "}
               {/* Caller Section */}{" "}
@@ -1042,65 +1113,10 @@ function CallForm() {
           </div>{" "}
         </div>
 
-        // <div
-        //   className="fixed inset-0 flex items-center justify-center z-50 bg-black/20 backdrop-blur-md"
-        //   onClick={() => dispatch(togglePopup(false))}
-        // >
-        //   <div
-        //     className="relative bg-gradient-to-br from-[#ffffff10] to-[#e9f0ff40] border border-blue-300/40 rounded-2xl shadow-2xl w-[90%] sm:w-[70%] md:w-[45%] text-center p-6 backdrop-blur-lg"
-        //     onClick={(e) => e.stopPropagation()}
-        //   >
-        //     {/* Glowing border animation */}
-        //     <div className="absolute inset-0 rounded-2xl border border-blue-400/30 animate-[pulseBorder_3s_ease-in-out_infinite] pointer-events-none"></div>
-
-        //     <h2 className="text-3xl font-bold text-blue-900 mb-6 tracking-wide">
-        //       Call Initiated
-        //     </h2>
-
-        //     <div className="flex flex-wrap items-center mb-6 text-black">
-        //       <span className="font-medium">Call ID:</span>
-        //       <span className="ml-3 text-black font-semibold">{callId}</span>
-        //     </div>
-
-        //     {/* Animated phone section */}
-        //     <div className="flex flex-col items-center justify-center">
-        //       <div className="relative w-28 h-28 flex items-center justify-center">
-        //         {/* Rotating ring glow */}
-        //         <div className="absolute w-full h-full rounded-full border-4 border-blue-400/30 animate-spin-slow"></div>
-        //         <div className="absolute w-[80%] h-[80%] rounded-full border-4 border-blue-500/50 animate-spin-reverse"></div>
-
-        //         {/* Pulsing inner circle */}
-        //         <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center shadow-[0_0_30px_#3b82f6aa] animate-pulse">
-        //           <IoCall color="white" size={36} className="animate-bounce mt-2" />
-        //         </div>
-        //       </div>
-
-        //       {/* Connecting text */}
-        //       <p className="mt-6 text-lg font-semibold text-blue-900 animate-pulse">
-        //         {status ?? "Connecting..."}
-        //       </p>
-        //     </div>
-
-        //     {/* Buttons */}
-        //     <div className="mt-8 border-t border-gray-200/50 pt-6 flex justify-center space-x-4">
-        //       <button
-        //         onClick={() => callId && handlePoll(callId)}
-        //         className="px-6 py-2 bg-gradient-to-r from-blue-700 to-blue-900 text-white rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer"
-        //       >
-        //         Check Status Now
-        //       </button>
-        //       <button
-        //         onClick={() => dispatch(togglePopup(false))}
-        //         className="px-6 py-2 border border-blue-900 text-blue-900 rounded-lg hover:bg-blue-50 transition-all duration-300 cursor-pointer"
-        //       >
-        //         Close
-        //       </button>
-        //     </div>
-        //   </div>
-        // </div>
       )}
     </>
   );
 }
 
 export default CallForm;
+

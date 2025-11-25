@@ -545,14 +545,19 @@ import {
   createCallStart,
   createCallSuccess,
   resetCall,
-  setTranscript,
+  // setTranscript,
   togglePopup,
 } from "../store/slices/callForm";
 import { useDispatch, useSelector } from "react-redux";
-import { checkCallStatus, initiateCall, getContacts, getAllPrompt } from "../api/Call";
+import {
+  // checkCallStatus,
+  initiateCall,
+  getContacts,
+  getAllPrompt,
+} from "../api/Call";
 import type { RootState } from "../store/store";
 import { useRef, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { IoCall } from "react-icons/io5";
 import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
@@ -587,12 +592,12 @@ function CallForm() {
     (state: RootState) => state.auth.user?.access_token
   );
 
-  const { callId, openPopup, transcript, status } = useSelector(
+  const { openPopup, transcript } = useSelector(
     (state: RootState) => state.call
   );
 
   console.log(transcript, "call id");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const onSubmit = async (values: CallFormInputs) => {
     try {
@@ -602,6 +607,7 @@ function CallForm() {
 
       const res = await initiateCall(values, token);
       dispatch(createCallSuccess(res));
+      reset();
 
       localStorage.setItem("lastCallId", res.call_id);
       localStorage.setItem("callerEmail", values.caller_email);
@@ -612,45 +618,44 @@ function CallForm() {
     }
   };
 
-  const handlePoll = async (id: string, interval?: number) => {
-    if (!token) return;
-    try {
-      const res = await checkCallStatus(id, token);
+  // const handlePoll = async (id: string, interval?: number) => {
+  //   if (!token) return;
+  //   try {
+  //     const res = await checkCallStatus(id, token);
 
-      // full response dispatch karo
-      dispatch(setTranscript(res));
+  //     // full response dispatch karo
+  //     dispatch(setTranscript(res));
 
-      // check status & stop polling
-      if (
-        res.status === "completed" ||
-        res.status === "busy" ||
-        res.status === "ended" ||
-        res.status === "unanswered"
-      ) {
-        if (interval) clearInterval(interval); // stop API hits
-        dispatch(togglePopup(false));
+  //     // check status & stop polling
+  //     if (
+  //       res.status === "completed" ||
+  //       res.status === "busy" ||
+  //       res.status === "ended" ||
+  //       res.status === "unanswered"
+  //     ) {
+  //       if (interval) clearInterval(interval); // stop API hits
+  //       dispatch(togglePopup(false));
 
-        navigate("/call"); // redirect to dashboard
-        reset();
-      }
-    } catch (err) {
-      console.error("Polling failed", err);
-    }
-  };
+  //       navigate("/call"); // redirect to dashboard
+  //       reset();
+  //     }
+  //   } catch (err) {
+  //     console.error("Polling failed", err);
+  //   }
+  // };
 
   // ✅ Polling every 3s when popup is open
-  useEffect(() => {
-    let interval: number;
-    if (openPopup && callId) {
-      interval = setInterval(() => {
-        handlePoll(callId, interval); // pass interval ref
-      }, 3000);
-    }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [openPopup, callId, token]);
-
+  // useEffect(() => {
+  //   let interval: number;
+  //   if (openPopup && callId) {
+  //     interval = setInterval(() => {
+  //       handlePoll(callId, interval); // pass interval ref
+  //     }, 3000);
+  //   }
+  //   return () => {
+  //     if (interval) clearInterval(interval);
+  //   };
+  // }, [openPopup, callId, token]);
 
   // Input tel: Name or phone search in api
   const [contacts, setContacts] = useState<
@@ -694,7 +699,6 @@ function CallForm() {
     fetchContacts();
   }, [token]);
 
-
   // Number Input || Select multiple number
   const [selectedNumbers, setSelectedNumbers] = useState<string[]>([]);
   const [typedValue, setTypedValue] = useState("");
@@ -716,9 +720,6 @@ function CallForm() {
   if (!newNum.startsWith("+")) {
     newNum = "+" + newNum;
   }
-
-
-
 
   // Call Context Dropdown || show all prompt_name
 
@@ -756,16 +757,38 @@ function CallForm() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (openPopup) {
+      const timer = setTimeout(() => {
+        dispatch(togglePopup(false));
 
+        // Reset phone number tags
+        setSelectedNumbers([]);
+        setTypedValue("");
 
+        // RESET EXCEPT name, email, language
+        reset(
+          {
+            caller_name: user?.username || "",
+            caller_email: user?.email || "",
+            language: user?.language || "en",
+            caller_number: "",
+            phone_numbers: [],
+            objective: "",
+            context: "",
+            system_prompt: "",
+            voice: "",
+          },
+          { keepDefaultValues: false }
+        );
+      }, 10000); // 10 seconds
 
-
-
-
+      return () => clearTimeout(timer);
+    }
+  }, [openPopup]);
 
   return (
     <>
-
       <div className="max-w-3xl mx-auto p-8 mt-8">
         <h1 className="text-2xl sm:text-4xl font-bold text-center mb-10 text-[#13243C]">
           Let AI Handle Your Next Call
@@ -806,8 +829,9 @@ function CallForm() {
                   },
                 })}
                 className={`w-full px-4 hover:border-blue-900
- py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900  ${errors.caller_email ? "border-red-500" : "border-gray-300"
-                  }`}
+ py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900  ${
+   errors.caller_email ? "border-red-500" : "border-gray-300"
+ }`}
                 placeholder="name@example.com"
               />
               {errors.caller_email && (
@@ -820,7 +844,6 @@ function CallForm() {
 
           {/* Phone Numbers */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-
             <div className="relative" ref={dropdownRef}>
               <label className="block text-sm font-semibold text-[#13243C] mb-1">
                 Phone Number
@@ -893,7 +916,6 @@ function CallForm() {
                       setTypedValue("");
                     }
                   }}
-
                   className="flex-1 outline-none py-1"
                   placeholder="+1234567890"
                 />
@@ -926,17 +948,15 @@ function CallForm() {
                         setValue("phone_numbers", updated);
                         setTypedValue("");
                       }}
-
-
                       className="px-4 py-2 cursor-pointer hover:bg-blue-100"
                     >
-                      <span className="font-medium">{c.firstName}</span> - {c.phoneNumber}
+                      <span className="font-medium">{c.firstName}</span> -{" "}
+                      {c.phoneNumber}
                     </li>
                   ))}
                 </ul>
               )}
             </div>
-
           </div>
 
           {/* Agent Name (New Field) */}
@@ -946,8 +966,9 @@ function CallForm() {
             </label>
             <select
               {...register("voice", { required: "Agent name is required" })}
-              className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900 ${errors.voice ? "border-red-500" : "border-gray-300"
-                }`}
+              className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900 ${
+                errors.voice ? "border-red-500" : "border-gray-300"
+              }`}
             >
               <option value="">Select Agent</option>
               <option value="david">David - english (Male)</option>
@@ -989,14 +1010,18 @@ function CallForm() {
             />
 
             {errors.context && (
-              <p className="text-red-500 text-xs mt-1">{errors.context.message}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {errors.context.message}
+              </p>
             )}
 
             {showPromptDropdown && prompts.length > 0 && (
               <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-60 overflow-y-auto shadow-md dropdown">
                 {prompts
                   .filter((p) =>
-                    p.prompt_name.toLowerCase().includes(typedContext.toLowerCase())
+                    p.prompt_name
+                      .toLowerCase()
+                      .includes(typedContext.toLowerCase())
                   )
                   .map((prompt) => (
                     <div
@@ -1015,7 +1040,6 @@ function CallForm() {
               </div>
             )}
           </div>
-
 
           {/* Language */}
           <div>
@@ -1046,7 +1070,6 @@ function CallForm() {
       {/* ==== Popup ==== */}
 
       {openPopup && (
-
         <div
           className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm"
           onClick={() => dispatch(togglePopup(false))}
@@ -1074,7 +1097,7 @@ function CallForm() {
               <div className="flex flex-col items-center justify-center py-5">
                 {" "}
                 {/* Animated Circle */}{" "}
-                <div className="relative">
+                <div className="relative mb-8">
                   {" "}
                   {/* Outer Animated Pulse */}{" "}
                   <span className="absolute inset-0 rounded-full bg-[#13243C] opacity-60 animate-ping"></span>{" "}
@@ -1085,23 +1108,23 @@ function CallForm() {
                   </div>{" "}
                 </div>{" "}
                 {/* Status Below */}{" "}
-                <p className="mt-6 text-lg font-medium text-[#13243C] animate-pulse">
+                {/* <p className="mt-6 text-lg font-medium text-[#13243C] animate-pulse">
                   {" "}
                   {status ?? "Connecting..."}{" "}
-                </p>{" "}
+                </p>{" "} */}
               </div>{" "}
             </div>{" "}
             {/* <div className="p-6 max-h-96 overflow-y-auto border-t border-blue-200 bg-blue-50 "> */}{" "}
             <div className="text-gray-700 leading-relaxed"> </div>{" "}
             <div className="p-6 border-t border-[#d1d5dc] flex justify-center">
               {" "}
-              <button
+              {/* <button
                 onClick={() => callId && handlePoll(callId)}
                 className="w-full cursor-pointer sm:w-auto px-2 sm:px-6 py-2 bg-[#13243C] text-white rounded-lg hover:opacity-90 transform transition-all duration-200 font-medium text-base font-semibold shadow-lg"
               >
                 {" "}
                 Check Status Now{" "}
-              </button>{" "}
+              </button>{" "} */}
               <button
                 onClick={() => dispatch(togglePopup(false))}
                 className="ml-4 px-6 py-2 bg-white border border-[#13243C] text-[#13243C] text-base font-semibold rounded-lg cursor-pointer"
@@ -1112,11 +1135,9 @@ function CallForm() {
             </div>{" "}
           </div>{" "}
         </div>
-
       )}
     </>
   );
 }
 
 export default CallForm;
-

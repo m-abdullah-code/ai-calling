@@ -25,7 +25,7 @@ const SignIn: React.FC = () => {
 
   const onSubmit: SubmitHandler<SignInData> = async (data: SignInData) => {
     console.log(data, "Data");
-    debugger;
+    // debugger;
     try {
       dispatch(loginStart());
       const response = await loginUser(data);

@@ -969,17 +969,17 @@ function CallForm() {
                 }`}
             >
               <option value="">Select Agent</option>
-              <option value="sam-elliot">Sam Elliot - english (Male)</option>
-              <option value="peck">Peck - english (Male)</option>
-              <option value="king">King - english (Male)</option>
-              <option value="barry-white">Barry White - english (Male)</option>
-              <option value="smokey-burt">Smokey Burt - english (Male)</option>
-              <option value="dark-blues-singer">Dark Blues Singer - english (Male)</option>
-              <option value="matthew-schmitz">Matthew Schmitz - english (Male)</option>
-              <option value="wyatt">Wyatt - english (Male)</option>
-              <option value="southern-mike">Southern Mike - english (Male)</option>
-              <option value="serafina">Serafina - english (Female)</option>
-              <option value="paul">Paul - english (Male)</option>
+              <option value="Sam Elliot">Sam Elliot - english (Male)</option>
+              <option value="Peck">Peck - english (Male)</option>
+              <option value="King">King - english (Male)</option>
+              <option value="Barry White">Barry White - english (Male)</option>
+              <option value="Smokey Burt">Smokey Burt - english (Male)</option>
+              <option value="Dark Blues Singer">Dark Blues Singer - english (Male)</option>
+              <option value="Matthew Schmitz">Matthew Schmitz - english (Male)</option>
+              <option value="Wyatt">Wyatt - english (Male)</option>
+              <option value="Southern Mike">Southern Mike - english (Male)</option>
+              <option value="Serafina">Serafina - english (Female)</option>
+              <option value="Paul">Paul - english (Male)</option>
 
             </select>
             {errors.voice && (

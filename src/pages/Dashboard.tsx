@@ -879,7 +879,8 @@ const Dashboard = () => {
     try {
       const data = await fetchRecordingStream(callId, token);
 
-      const audioUrl = data?.recording_url;  // correct JSON key
+      // correct JSON key
+      const audioUrl = data?.recording_url;
 
       if (!audioUrl) {
         toast.error("Recording URL not found");

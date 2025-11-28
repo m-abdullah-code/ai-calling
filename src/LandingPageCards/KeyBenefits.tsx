@@ -5,11 +5,11 @@ function KeyBenefits() {
     const benefits = [
         {
             title: "Boost Efficiency & Save Time",
-            desc: "No more wasting hours on repetitive calls. Paul.ai automates tasks so your team can focus on high-value work.",
+            desc: "No more wasting hours on repetitive calls. John.ai automates tasks so your team can focus on high-value work.",
         },
         {
             title: "Cut Costs by 70–80%",
-            desc: "Eliminate the need for large call center teams—Paul.ai delivers scalable AI-powered calls at a fraction of the cost.",
+            desc: "Eliminate the need for large call center teams—John.ai delivers scalable AI-powered calls at a fraction of the cost.",
         },
         {
             title: "Increase Revenue by 50–80%",
@@ -17,7 +17,7 @@ function KeyBenefits() {
         },
         {
             title: "24/7 Availability",
-            desc: "Paul.ai never sleeps, ensuring seamless customer engagement anytime, anywhere.",
+            desc: "John.ai never sleeps, ensuring seamless customer engagement anytime, anywhere.",
         },
         {
             title: "Seamless Integration",
@@ -50,7 +50,7 @@ function KeyBenefits() {
                             Key Benefits
                         </span>
                         <h2 className="text-[clamp(1.25rem,4vw,2rem)] font-bold text-gray-200 mt-4">
-                            Why Paul.ai Stands Out
+                            Why John.ai Stands Out
                         </h2>
                         <p className="text-gray-200 text-[clamp(0.875rem,2vw,1.125rem)] mt-2">
                             Enhance engagement and achieve real results.

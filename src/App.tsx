@@ -9,7 +9,7 @@ import PrivateRoute from "./routes/private";
 import CallForm from "./pages/CallForm";
 import AddPrompt from "./pages/AddPrompt";
 import LandingPage from "./pages/LandingPage";
-import UploadCsv from "./pages/UploadCsv";
+// import UploadCsv from "./pages/UploadCsv";
 
 function App() {
   return (
@@ -56,14 +56,14 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/upload-csv"
             element={
               <PrivateRoute>
                 <UploadCsv />
               </PrivateRoute>
             }
-          />
+          /> */}
           <Route
             path="/call"
             element={

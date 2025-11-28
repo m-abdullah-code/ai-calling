@@ -12,12 +12,12 @@ function UseCases() {
   const useCases = [
     {
       title: "Customer Support",
-      desc: "Deliver 24/7 AI-powered assistance with Paul.ai, without increasing staff costs.",
+      desc: "Deliver 24/7 AI-powered assistance with John.ai, without increasing staff costs.",
       img: support,
     },
     {
       title: "Appointment Scheduling",
-      desc: "Paul.ai manages bookings, reschedules, and confirmations seamlessly.",
+      desc: "John.ai manages bookings, reschedules, and confirmations seamlessly.",
       img: calender,
     },
     {
@@ -27,17 +27,17 @@ function UseCases() {
     },
     {
       title: "Collections & Reminders",
-      desc: "Automate payment reminders and reduce overdue payments effortlessly with Paul.ai.",
+      desc: "Automate payment reminders and reduce overdue payments effortlessly with John.ai.",
       img: collection,
     },
     {
       title: "HR & Recruitment",
-      desc: "Paul.ai pre-screens candidates, schedules interviews, and follows up automatically.",
+      desc: "John.ai pre-screens candidates, schedules interviews, and follows up automatically.",
       img: fifth,
     },
     {
       title: "Custom Development",
-      desc: "Tailored AI solutions from Paul.ai, designed to meet your unique business needs.",
+      desc: "Tailored AI solutions from John.ai, designed to meet your unique business needs.",
       img: calender,
     },
   ];
@@ -50,10 +50,10 @@ function UseCases() {
           Use Cases
         </span>
         <h2 className="text-[clamp(1.25rem,5vw,2rem)] font-bold text-gray-900 mt-4">
-          Who Benefits from Paul.ai
+          Who Benefits from John.ai
         </h2>
         <p className="text-blue-900 mt-2 text-[clamp(0.875rem,3vw,1rem)] max-w-md">
-          Sales & Lead Generation – Let Paul handle cold calls, lead
+          Sales & Lead Generation – Let John handle cold calls, lead
           qualification, and follow-ups so you can focus on closing deals.
         </p>
       </div>
@@ -72,7 +72,7 @@ function UseCases() {
 
       {/* Footer */}
       <p className="text-gray-600 text-[clamp(1rem,3vw,1.25rem)] mt-8 max-w-md text-center">
-        Paul.ai: The Game-Changer for Every Call-Driven Business.
+        John.ai: The Game-Changer for Every Call-Driven Business.
       </p>
 
       <div className="mt-6">

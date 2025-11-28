@@ -5,7 +5,7 @@ function CallAction() {
     {
       title: "Quick to Access",
       value: "1 Day",
-      desc: "Average time from contract to project kick-off with Paul.ai",
+      desc: "Average time from contract to project kick-off with John.ai",
     },
     {
       title: "Quality of Services",
@@ -23,7 +23,7 @@ function CallAction() {
     <section className="py-16 px-4 md:px-8 bg-white text-center">
       <div className="flex flex-col items-center">
         <span className="px-4 py-1 border border-blue-900 rounded-full text-xs text-black">
-          The Core of Paul.ai
+          The Core of John.ai
         </span>
         <h2 className="text-3xl md:text-4xl font-bold text-black mt-4">
           Making Every Call Effortless

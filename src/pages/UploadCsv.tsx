@@ -49,23 +49,23 @@ function UploadCsv() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-8 mt-8">
+    <div className="max-w-3xl mx-auto mt-8">
       <Toaster position="top-right" />
 
-      <h1 className="text-2xl sm:text-4xl mb-8 font-bold text-center text-[#13243C]">
+      {/* <h1 className="text-2xl sm:text-4xl mb-8 font-bold text-center text-[#13243C]">
         CSV Excel
       </h1>
 
       <p className="text-gray-600 text-center mb-10">
         Upload your Excel or CSV file quickly and easily.
-      </p>
+      </p> */}
 
-      <div className="border-2 border-dashed border-[#13243C] rounded-2xl p-10 bg-white shadow-md transition-all flex flex-col">
+      <div className="transition-all flex flex-col">
         <label className="text-lg font-semibold text-[#13243C] mb-4 text-center">
           Upload Excel / CSV File
         </label>
 
-        <label className="cursor-pointer bg-[#13243C] text-white text-center px-6 py-3 rounded-lg shadow hover:bg-blue-900 transition-all max-w-2xs w-full mx-auto">
+        <label className="cursor-pointer bg-[#13243C] text-white text-center px-6 py-3 rounded-lg shadow hover:opacity-90 transition-all max-w-2xs w-full mx-auto">
           Choose File
           <input
             type="file"

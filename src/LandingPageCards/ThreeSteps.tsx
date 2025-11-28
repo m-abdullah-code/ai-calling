@@ -9,7 +9,7 @@ function ThreeSteps() {
     },
     {
       title: "AI Takes Over",
-      desc: "Paul.ai dials, engages, and responds in real-time, handling interactions just like a human.",
+      desc: "John.ai dials, engages, and responds in real-time, handling interactions just like a human.",
     },
     {
       title: "Track & Optimize",
@@ -24,7 +24,7 @@ function ThreeSteps() {
         3 Easy Steps to Smarter, AI-Powered Calls
       </h2>
       <p className="text-blue-900 text-[clamp(0.875rem,2vw,1rem)] mb-8">
-        Boost Engagement and Drive Results with Paul.ai
+        Boost Engagement and Drive Results with John.ai
       </p>
 
       {/* Steps Grid */}
@@ -59,7 +59,7 @@ function ThreeSteps() {
         onClick={() => navigate("/dashboard")}
         className="text-[#13243C] text-base font-semibold bg-white px-6 py-3 rounded-md border border-2 border-[#13243C] hover:bg-[#13243C] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer mt-6"
       >
-        <span>Try Paul.ai Today</span>
+        <span>Try John.ai Today</span>
       </button>
     </section>
   );

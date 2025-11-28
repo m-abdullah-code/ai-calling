@@ -65,8 +65,8 @@ function HeaderLanding() {
                 key={item.key}
                 onClick={() => handleScrollTo(item.id)}
                 className={`list-none cursor-pointer font-semibold transition-colors duration-200 text-base ${isScrolled
-                    ? "text-[#13243C] hover:text-blue-700"
-                    : "text-white hover:text-[#13243C]"
+                  ? "text-[#13243C] hover:text-blue-700"
+                  : "text-white hover:text-[#13243C]"
                   }`}
               >
                 {item.label}
@@ -100,7 +100,7 @@ function HeaderLanding() {
                       }`}
                     size={24}
                   />
-                  <FaChevronDown className="text-white" size={12} />
+                  <FaChevronDown className={`${isScrolled ? "text-black" : "text-white"}`} size={12} />
                 </button>
 
                 {/* DROPDOWN */}

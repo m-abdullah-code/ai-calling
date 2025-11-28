@@ -22,7 +22,7 @@ function BannerLand() {
                             WebkitTextStroke: "3px #1e3a8a",
                         }}
                     >
-                        Paul
+                        John
                     </h2>
                 </div>
             </div>

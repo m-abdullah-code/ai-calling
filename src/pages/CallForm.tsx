@@ -562,6 +562,8 @@ import { IoCall } from "react-icons/io5";
 import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
 
+import UploadCsv from "./UploadCsv";
+
 function CallForm() {
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
@@ -732,9 +734,11 @@ function CallForm() {
       try {
         if (!token) return;
         const response = await getAllPrompt(token);
-        setPrompts(response);
+        // setPrompts(response);
+        setPrompts(Array.isArray(response) ? response : []);
       } catch (err) {
         console.error("Error loading prompts", err);
+        setPrompts([]);
       }
     }
     fetchPrompts();
@@ -840,6 +844,9 @@ function CallForm() {
               )}
             </div>
           </div>
+
+          {/* Upload csv file  */}
+          <UploadCsv />
 
           {/* Phone Numbers */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
@@ -969,17 +976,16 @@ function CallForm() {
                 }`}
             >
               <option value="">Select Agent</option>
-              <option value="Sam Elliot">Sam Elliot - english (Male)</option>
-              <option value="Peck">Peck - english (Male)</option>
-              <option value="King">King - english (Male)</option>
-              <option value="Barry White">Barry White - english (Male)</option>
-              <option value="Smokey Burt">Smokey Burt - english (Male)</option>
-              <option value="Dark Blues Singer">Dark Blues Singer - english (Male)</option>
-              <option value="Matthew Schmitz">Matthew Schmitz - english (Male)</option>
-              <option value="Wyatt">Wyatt - english (Male)</option>
-              <option value="Southern Mike">Southern Mike - english (Male)</option>
-              <option value="Serafina">Serafina - english (Female)</option>
-              <option value="Paul">Paul - english (Male)</option>
+              <option value="george">George - english (Male)</option>
+              <option value="julian">Julian - english (Male)</option>
+              <option value="edward">Edward - english (Male)</option>
+              <option value="marcus">Marcus - english (Male)</option>
+              <option value="james">James - english (Male)</option>
+              <option value="meera">Meera - english (Female)</option>
+              <option value="shelby">Shelby - english (Female)</option>
+              <option value="blondie">Blondie - english (Female)</option>
+              <option value="samarax">Samara X - english (Female)</option>
+              <option value="verity">Verity - english (Female)</option>
 
             </select>
             {errors.voice && (

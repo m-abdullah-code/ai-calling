@@ -30,7 +30,7 @@ function FooterLanding() {
       { label: "Comparison", href: "#" },
       { label: "Enterprise Solution", href: "#" },
     ],
-    "Contact Us": [{ label: "support@paulcall.ai", href: "#" }],
+    "Contact Us": [{ label: "support@Johncall.ai", href: "#" }],
   };
 
   const socialLinks = [
@@ -47,7 +47,7 @@ function FooterLanding() {
           {/* Logo */}
           <div className="flex justify-center md:justify-start mb-8">
             <Link to="/" className="text-2xl text-white font-bold">
-              Paul.<span className="font-semibold text-white">Calling</span>
+              John.<span className="font-semibold text-white">Calling</span>
             </Link>
           </div>
 
@@ -101,7 +101,7 @@ function FooterLanding() {
           {/* Bottom */}
           <div className="border-t border-gray-200 mt-10 pt-6">
             <p className="text-center text-sm text-white">
-              ©{new Date().getFullYear()} | All rights reserved by Paul.ai AI
+              ©{new Date().getFullYear()} | All rights reserved by John.ai AI
             </p>
           </div>
         </div>

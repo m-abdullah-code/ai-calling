@@ -23,11 +23,11 @@ function LandHeroSection() {
       {/* HERO CONTENT */}
       <div className="relative container mx-auto h-full min-h-[inherit] px-3 sm:px-4 flex flex-col justify-center items-center text-center text-white tracking-[1px]">
         <p className="px-3 sm:px-4 py-2 mb-4 text-[10px] sm:text-xs border border-white rounded-full inline-block">
-          Paul.ai - The AI Agent That Transforms Your Calling Experience
+          John.ai - The AI Agent That Transforms Your Calling Experience
         </p>
 
         <h1 className="text-xl sm:text-3xl md:text-5xl font-bold leading-tight">
-          Paul.ai – Smarter Calls
+          John.ai – Smarter Calls
         </h1>
         <h2 className="mt-2 text-lg sm:text-3xl md:text-5xl font-light leading-tight">
           Better Conversations
@@ -38,7 +38,7 @@ function LandHeroSection() {
         </p>
 
         <p className="mt-3 max-w-sm sm:max-w-md md:max-w-2xl mx-auto text-white text-[11px] sm:text-xs md:text-sm px-2">
-          Spending too much time on repetitive calls? Let Paul.ai take care of
+          Spending too much time on repetitive calls? Let John.ai take care of
           your outreach, support, and follow-ups with lifelike AI conversations
           - freeing you to focus on growth.
         </p>

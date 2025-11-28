@@ -1049,8 +1049,8 @@ const Dashboard = () => {
                       className="text-center py-10 text-blue-500 font-medium"
                     >
                       <div className="flex flex-col items-center space-y-2">
-                        <div className="w-8 h-8 border-4 rounded-full animate-spin"></div>
-                        <p className="text-500">Loading calls...</p>
+                        <div className="w-10 h-10 border-4 border-[#13243C] border-t-transparent rounded-full animate-spin"></div>
+                        {/* <p className="text-500">Loading calls...</p> */}
                       </div>
                     </td>
                   </tr>
@@ -1240,10 +1240,10 @@ const Dashboard = () => {
 
             {transcriptLoading && (
               <div className="absolute inset-0 bg-white/80 flex flex-col items-center justify-center z-10">
-                <div className="w-10 h-10 border-4 border-[#3F3EED] border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-[#3F3EED] mt-3 font-medium">
+                <div className="w-10 h-10 border-4 border-[#13243C] border-t-transparent rounded-full animate-spin"></div>
+                {/* <p className="text-[#3F3EED] mt-3 font-medium">
                   Loading transcript...
-                </p>
+                </p> */}
               </div>
             )}
 

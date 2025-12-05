@@ -52,14 +52,6 @@ function UploadCsv() {
     <div className="max-w-3xl mx-auto mt-8">
       <Toaster position="top-right" />
 
-      {/* <h1 className="text-2xl sm:text-4xl mb-8 font-bold text-center text-[#13243C]">
-        CSV Excel
-      </h1>
-
-      <p className="text-gray-600 text-center mb-10">
-        Upload your Excel or CSV file quickly and easily.
-      </p> */}
-
       <div className="transition-all flex flex-col">
         <label className="text-lg font-semibold text-[#13243C] mb-4 text-center">
           Upload Excel / CSV File

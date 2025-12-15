@@ -478,7 +478,7 @@ function CallForm() {
               <option value="meera">Meera - english (Female)</option>
               <option value="shelby">Shelby - english (Female)</option>
               <option value="blondie">Blondie - english (Female)</option>
-              <option value="samarax">Samara X - english (Female)</option>
+              {/* <option value="samarax">Samara X - english (Female)</option> */}
               <option value="verity">Verity - english (Female)</option>
 
             </select>

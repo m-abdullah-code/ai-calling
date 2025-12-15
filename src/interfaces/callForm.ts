@@ -6,7 +6,7 @@ export interface CallFormInputs {
   objective: string;
   context: string;
   system_prompt: string,
-  language: "english" | "spanish";
+  language: "english" | "spanish" | "norwegian";
   voice: string;
 }
 

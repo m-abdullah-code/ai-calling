@@ -541,6 +541,7 @@ function CallForm() {
               className="w-full px-4 py-2 border border-gray-300 hover:border-blue-900 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900"
             >
               <option value="en">English</option>
+              <option value="no">Norwegian</option>
               {/* <option value="es">Spanish</option> */}
             </select>
           </div>

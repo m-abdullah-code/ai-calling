@@ -17,10 +17,13 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Handle 401 and 403 errors
     if (error.response?.status === 401 || error.response?.status === 403) {
       store.dispatch(logout());
       window.location.href = "/";
     }
+    
+    // Return error without modifying it - let the caller handle it
     return Promise.reject(error);
   }
 );

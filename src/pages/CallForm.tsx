@@ -62,9 +62,18 @@ function CallForm() {
 
   const onSubmit = async (values: CallFormInputs) => {
     try {
+      // Clear previous error state and reset call state
       dispatch(resetCall());
+      // Small delay to ensure state is cleared
+      await new Promise(resolve => setTimeout(resolve, 100));
       dispatch(createCallStart());
+
       if (!token) throw new Error("No token found. Please login again.");
+
+      // Validate voice/agent_name field exists
+      if (!values.voice || values.voice.trim() === "") {
+        throw new Error("Agent name is required");
+      }
 
       const res = await initiateCall(values, token);
       dispatch(createCallSuccess(res));
@@ -74,8 +83,9 @@ function CallForm() {
       localStorage.setItem("callerEmail", values.caller_email);
     } catch (err: unknown) {
       const error = err as AxiosError<{ error: string }>;
+      // Clear the loading state and set error
+      dispatch(createCallFailure(error.message || "An error occurred"));
       toast.error(error?.response?.data?.error || "Oops an error occurred");
-      dispatch(createCallFailure(error.message));
     }
   };
 
